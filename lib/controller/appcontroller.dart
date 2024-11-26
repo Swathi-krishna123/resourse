@@ -7,7 +7,7 @@ class Appcontroller extends GetxController {
   var isLoading = false.obs;
   var medicalSearch = <Map<String, dynamic>>[].obs; // Strongly typed list
   var filteredMedicalSearch = <Map<String, dynamic>>[].obs;
-  var selectedItems = <Map<String, dynamic>>[].obs;
+var selectedItems = <Map<String, dynamic>>[].obs;
 
   @override
   void onInit() {
