@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:resource_plus/constants/colors.dart';
 import 'package:resource_plus/controller/appcontroller.dart';
 import 'package:resource_plus/customWidgets/customWidgets.dart';
+import 'package:resource_plus/view/shareResources.dart';
 
 class Homepage extends StatelessWidget {
   Homepage({super.key});
@@ -12,6 +13,7 @@ class Homepage extends StatelessWidget {
   final Appcontroller controller = Get.put(Appcontroller());
   final TextEditingController _searchController = TextEditingController();
   FocusNode searchFocusNode = FocusNode();
+  var searchboxEnable = false.obs;
 
   // Filter search results based on query
   void _filterSearchResults(String query) {
@@ -42,9 +44,12 @@ class Homepage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Search TextField
-                Container(
+                SizedBox(
                   height: 50,
                   child: TextFormField(
+                    onTap: () {
+                      searchboxEnable.value = true;
+                    },
                     controller: _searchController,
                     focusNode: searchFocusNode,
                     onChanged: _filterSearchResults,
@@ -87,51 +92,61 @@ class Homepage extends StatelessWidget {
                 const SizedBox(height: 10),
                 Obx(
                   () => controller.selectedItems.isEmpty
-                      ? SizedBox.shrink()
+                      ? const SizedBox.shrink()
                       : Row(
                           children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              margin: const EdgeInsets.only(
-                                  right: 10), // Add margin between items
-                              decoration: BoxDecoration(
-                                color: Appcolors.themeColor.withOpacity(0.14),
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(color: Appcolors.themeColor),
-                              ),
-                              child: Text(
-                                'Refresh',
-                                style: TextStyle(
-                                  color: Appcolors.blackColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
+                            GestureDetector(
+                              onTap: () {
+                                controller.medicalSearchDetails.refresh();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                margin: const EdgeInsets.only(
+                                    right: 10), // Add margin between items
+                                decoration: BoxDecoration(
+                                  color: Appcolors.themeColor.withOpacity(0.14),
+                                  borderRadius: BorderRadius.circular(4),
+                                  border:
+                                      Border.all(color: Appcolors.themeColor),
+                                ),
+                                child: Text(
+                                  'Refresh',
+                                  style: TextStyle(
+                                    color: Appcolors.blackColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              margin: const EdgeInsets.only(
-                                  right: 10), // Add margin between items
-                              decoration: BoxDecoration(
-                                color: Appcolors.themeColor.withOpacity(0.14),
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(color: Appcolors.themeColor),
-                              ),
-                              child: Text(
-                                'Share Resources',
-                                style: TextStyle(
-                                  color: Appcolors.blackColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
+                            GestureDetector(
+                              onTap: () => Get.to(const ShareResources()),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                margin: const EdgeInsets.only(
+                                    right: 10), // Add margin between items
+                                decoration: BoxDecoration(
+                                  color: Appcolors.themeColor.withOpacity(0.14),
+                                  borderRadius: BorderRadius.circular(4),
+                                  border:
+                                      Border.all(color: Appcolors.themeColor),
+                                ),
+                                child: Text(
+                                  'Share Resources',
+                                  style: TextStyle(
+                                    color: Appcolors.blackColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
 
@@ -171,8 +186,7 @@ class Homepage extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {
                                   // Remove the item when delete icon is clicked
-                                  controller.selectedItems.remove(item);
-                                  controller.selectedItems.refresh();
+                                  controller.removeMedicalSearchDetails(item);
                                 },
                                 child: const Icon(
                                   Icons.close,
@@ -233,85 +247,145 @@ class Homepage extends StatelessWidget {
               }
 
               // Show filtered search results
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: controller.filteredMedicalSearch.length,
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final item = controller.filteredMedicalSearch[index];
-                  final name = item['nm'] ?? 'Unknown Name';
+              return controller.medicalSearchDetails.isNotEmpty &&
+                      searchboxEnable == false
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controller.medicalSearchDetails.length,
+                      itemBuilder: (context, index) {
+                        final items = controller.medicalSearchDetails[index];
+                        final heading = items["tl"] ?? 'unknown';
+                        final details = items["dc"] ?? 'unknown';
+                        final phone = items["ph"] ?? 'unknown';
+                        final web = items["wb"] ?? 'unknown';
+                        return Container(
+                          margin: const EdgeInsetsDirectional.all(20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                heading,
+                                style: TextStyle(
+                                    color: Appcolors.TextColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                details,
+                                textAlign: TextAlign.justify,
+                                style: TextStyle(
+                                    color: Appcolors.TextColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Text(
+                                phone,
+                                style: TextStyle(
+                                    color: Appcolors.TextColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                web,
+                                style: TextStyle(
+                                    color: Appcolors.TextColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                              )
+                            ],
+                          ),
+                        );
+                      })
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controller.filteredMedicalSearch.length,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final item = controller.filteredMedicalSearch[index];
+                        final name = item['nm'] ?? 'Unknown Name';
 
-                  return Obx(() {
-                    // Check if the current item is selected
-                    final isSelected = controller.selectedItems.any(
-                      (selectedItem) => selectedItem['id'] == item['id'],
-                    );
-
-                    return CheckboxListTile(
-                      title: Text(name),
-                      value: isSelected,
-                      onChanged: (bool? value) {
-                        if (value == true) {
-                          // Add the item if it is not already selected
-                          controller.selectedItems.add(item);
-                        } else {
-                          // Remove the item if it is already selected
-                          controller.selectedItems.removeWhere(
+                        return Obx(() {
+                          // Check if the current item is selected
+                          final isSelected = controller.selectedItems.any(
                             (selectedItem) => selectedItem['id'] == item['id'],
                           );
-                        }
 
-                        // Log the current selection for debugging
-                        log("Selected items: ${controller.selectedItems.map((e) => e['id'])}");
+                          return CheckboxListTile(
+                            title: Text(name),
+                            value: isSelected,
+                            onChanged: (bool? value) {
+                              if (value == true) {
+                                // Add the item if it is not already selected
+                                controller.selectedItems.add(item);
+                              } else {
+                                // Remove the item if it is already selected
+                                controller.selectedItems.removeWhere(
+                                  (selectedItem) =>
+                                      selectedItem['id'] == item['id'],
+                                );
+                              }
 
-                        // Notify the UI of changes
-                        controller.selectedItems.refresh();
+                              // Log the current selection for debugging
+                              log("Selected items: ${controller.selectedItems.map((e) => e['id'])}");
+
+                              // Notify the UI of changes
+                              controller.selectedItems.refresh();
+                            },
+                          );
+                        });
                       },
                     );
-                  });
-                },
-              );
             }),
           ),
 
           // Conditional Button at the Bottom
           Obx(() {
-            return Visibility(
-              visible: controller.selectedItems.isNotEmpty,
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Appcolors.themeColor.withOpacity(0.14),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    // Log selected items (already being shown in the box)
-                    log("Proceed with selected items: ${controller.selectedItems}");
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.search,
-                        color: Appcolors.themeColor,
-                        size: 30,
+            return controller.medicalSearchDetails.isNotEmpty &&
+                    searchboxEnable == false
+                ? const SizedBox()
+                : Visibility(
+                    visible: controller.selectedItems.isNotEmpty ||
+                        searchboxEnable == true,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Appcolors.themeColor.withOpacity(0.14),
                       ),
-                      const SizedBox(width: 5),
-                      Text(
-                        'Find Resources',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                          color: Appcolors.themeColor,
+                      child: GestureDetector(
+                        onTap: () async {
+                          // Log selected items (already being shown in the box)
+                          log("Proceed with selected items: ${controller.selectedItems}");
+                          controller.fetchMedicalSearchDetails();
+                          searchboxEnable.value = false;
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search,
+                              color: Appcolors.themeColor,
+                              size: 30,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              'Find Resources',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Appcolors.themeColor,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            );
+                    ),
+                  );
           }),
         ],
       ),

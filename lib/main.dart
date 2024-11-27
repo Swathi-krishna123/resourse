@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:resource_plus/constants/colors.dart';
 import 'package:resource_plus/view/homepage.dart';
-import 'package:resource_plus/view/searchSuggestions.dart';
+import 'package:resource_plus/view/shareResources.dart';
 
 void main() {
   runApp(const MyApp());
