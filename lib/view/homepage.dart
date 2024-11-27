@@ -89,7 +89,7 @@ class Homepage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
                 Obx(
                   () => controller.selectedItems.isEmpty
                       ? const SizedBox.shrink()
@@ -121,7 +121,16 @@ class Homepage extends StatelessWidget {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () => Get.to(const ShareResources()),
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  
+                                  isScrollControlled:
+                                      true, // Allows full-screen height
+
+                                  builder: (context) => ShareResources(),
+                                );
+                              },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),

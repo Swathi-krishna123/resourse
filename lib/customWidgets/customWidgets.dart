@@ -5,7 +5,7 @@ import 'package:resource_plus/constants/colors.dart';
 class Customwidgets {
   AppBar customAppbar() {
     return AppBar(
-      toolbarHeight: 75,
+      toolbarHeight: 65,
       title: Text.rich(
         TextSpan(
           children: [
