@@ -93,70 +93,110 @@ class Homepage extends StatelessWidget {
                 Obx(
                   () => controller.selectedItems.isEmpty
                       ? const SizedBox.shrink()
-                      : Row(
+                      : Column(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                controller.medicalSearchDetails.refresh();
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                margin: const EdgeInsets.only(
-                                    right: 10), // Add margin between items
-                                decoration: BoxDecoration(
-                                  color: Appcolors.themeColor.withOpacity(0.14),
-                                  borderRadius: BorderRadius.circular(4),
-                                  border:
-                                      Border.all(color: Appcolors.themeColor),
-                                ),
-                                child: Text(
-                                  'Refresh',
-                                  style: TextStyle(
-                                    color: Appcolors.blackColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    controller.medicalSearchDetails.refresh();
+                                  },
+                                  child: Container(
+                                    height: 42,
+                                    width: 113,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    margin: const EdgeInsets.only(
+                                        right: 10), // Add margin between items
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffD6C2FF)
+                                          .withOpacity(0.14),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                            'assets/svg/refreshicon.svg'),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            controller.medicalSearchDetails
+                                                .refresh();
+                                            controller.selectedItems.refresh();
+                                          },
+                                          child: Text(
+                                            'Refresh',
+                                            style: TextStyle(
+                                              color: Appcolors.blackColor,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  
-                                  isScrollControlled:
-                                      true, // Allows full-screen height
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => ShareResources());
+                                  },
+                                  child: Container(
+                                    height: 42,
+                                    width: 240,
 
-                                  builder: (context) => ShareResources(),
-                                );
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                margin: const EdgeInsets.only(
-                                    right: 10), // Add margin between items
-                                decoration: BoxDecoration(
-                                  color: Appcolors.themeColor.withOpacity(0.14),
-                                  borderRadius: BorderRadius.circular(4),
-                                  border:
-                                      Border.all(color: Appcolors.themeColor),
-                                ),
-                                child: Text(
-                                  'Share Resources',
-                                  style: TextStyle(
-                                    color: Appcolors.blackColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
+                                    // Add margin between items
+                                    decoration: BoxDecoration(
+                                      color: Appcolors.themeColor
+                                          .withOpacity(0.14),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                            'assets/svg/sendicon.svg'),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          'Share Resources',
+                                          style: TextStyle(
+                                            color: Appcolors.blackColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Divider(
+                              color: Appcolors.themeColor.withOpacity(0.14),
+                            )
                           ],
                         ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 5,
                 ),
 
                 // Selected Items Display
@@ -177,8 +217,9 @@ class Homepage extends StatelessWidget {
                           margin: const EdgeInsets.only(
                               right: 10), // Add margin between items
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: Appcolors.blackColor),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: Appcolors.themeColor.withOpacity(0.44)),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -191,18 +232,17 @@ class Homepage extends StatelessWidget {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
+                              const SizedBox(
+                                width: 5,
+                              ),
                               const SizedBox(width: 5),
                               GestureDetector(
-                                onTap: () {
-                                  // Remove the item when delete icon is clicked
-                                  controller.removeMedicalSearchDetails(item);
-                                },
-                                child: const Icon(
-                                  Icons.close,
-                                  color: Colors.red,
-                                  size: 18,
-                                ),
-                              ),
+                                  onTap: () {
+                                    // Remove the item when delete icon is clicked
+                                    controller.removeMedicalSearchDetails(item);
+                                  },
+                                  child: SvgPicture.asset(
+                                      'assets/svg/deleteicon.svg')),
                             ],
                           ),
                         );
@@ -326,6 +366,8 @@ class Homepage extends StatelessWidget {
                           return CheckboxListTile(
                             title: Text(name),
                             value: isSelected,
+                            selected: true,
+                            activeColor: Appcolors.themeColor,
                             onChanged: (bool? value) {
                               if (value == true) {
                                 // Add the item if it is not already selected
