@@ -134,9 +134,8 @@ class Homepage extends StatelessWidget {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            controller.medicalSearchDetails
-                                                .refresh();
-                                            controller.selectedItems.refresh();
+                                            controller.selectedItems.clear();
+                                            controller.medicalSearchDetails.clear();
                                           },
                                           child: Text(
                                             'Refresh',

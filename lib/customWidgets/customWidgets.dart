@@ -10,38 +10,7 @@ class Customwidgets {
       shadowColor: Colors.transparent,
       foregroundColor: Appcolors.backgroundColor,
       surfaceTintColor: Appcolors.backgroundColor,
-      title: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: 'Re.',
-              style: TextStyle(
-                  color: Appcolors.themeColor,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 30.69), // Normal text
-            ),
-            TextSpan(
-              text: 'source',
-              style: TextStyle(
-                  color: Appcolors.blackColor,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 30.69), // Normal text
-            ),
-            WidgetSpan(
-              child: Transform.translate(
-                offset: const Offset(0, -5), // Adjust the vertical position
-                child: Text(
-                  '+', // Superscript text
-                  style: TextStyle(
-                      color: Appcolors.themeColor,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 30.69), // Smaller font size
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      title: SvgPicture.asset('assets/svg/applogo.svg',height: 30,),
     );
   }
 
@@ -134,7 +103,7 @@ class Customwidgets {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
               labelText!,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xff7A7A7A),
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -146,3 +115,39 @@ class Customwidgets {
     );
   }
 }
+
+
+
+
+// title: Text.rich(
+      //   TextSpan(
+      //     children: [
+      //       TextSpan(
+      //         text: 'Re.',
+      //         style: TextStyle(
+      //             color: Appcolors.themeColor,
+      //             fontWeight: FontWeight.w700,
+      //             fontSize: 30.69), // Normal text
+      //       ),
+      //       TextSpan(
+      //         text: 'source',
+      //         style: TextStyle(
+      //             color: Appcolors.blackColor,
+      //             fontWeight: FontWeight.w700,
+      //             fontSize: 30.69), // Normal text
+      //       ),
+      //       WidgetSpan(
+      //         child: Transform.translate(
+      //           offset: const Offset(0, -5), // Adjust the vertical position
+      //           child: Text(
+      //             '+', // Superscript text
+      //             style: TextStyle(
+      //                 color: Appcolors.themeColor,
+      //                 fontWeight: FontWeight.w700,
+      //                 fontSize: 30.69), // Smaller font size
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
