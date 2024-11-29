@@ -10,7 +10,10 @@ class Customwidgets {
       shadowColor: Colors.transparent,
       foregroundColor: Appcolors.backgroundColor,
       surfaceTintColor: Appcolors.backgroundColor,
-      title: SvgPicture.asset('assets/svg/applogo.svg',height: 30,),
+      title: SvgPicture.asset(
+        'assets/svg/applogo.svg',
+        height: 25,
+      ),
     );
   }
 
@@ -19,6 +22,7 @@ class Customwidgets {
     TextEditingController? searchController,
   }) {
     return TextFormField(
+        cursorColor: Appcolors.themeColor,
         controller: searchController,
         decoration: InputDecoration(
             hintText: 'Search',
@@ -26,7 +30,10 @@ class Customwidgets {
                 fontWeight: FontWeight.w300,
                 fontSize: 20,
                 color: Appcolors.hintColor),
-            prefixIcon: SvgPicture.asset('assets/svg/searchicon.svg'),
+            prefixIcon: SvgPicture.asset(
+              'assets/svg/searchicon.svg',
+              color: Appcolors.hintColor,
+            ),
             suffixIcon: Container(
               margin: const EdgeInsets.only(right: 5),
               width: 44,
@@ -65,10 +72,9 @@ class Customwidgets {
           controller: controller,
           validator: validator,
           focusNode: focusNode,
-          
           onFieldSubmitted: (value) => onFocusChange,
           decoration: InputDecoration(
-            suffixIcon:suffixIcon ,
+            suffixIcon: suffixIcon,
             hintText: hintText,
             hintStyle: TextStyle(
               color: Appcolors.hintColor.withOpacity(0.62),

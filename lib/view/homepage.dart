@@ -39,7 +39,7 @@ class Homepage extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.only(left: 20,right: 20,bottom: 10,top: 5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -53,6 +53,7 @@ class Homepage extends StatelessWidget {
                     controller: _searchController,
                     focusNode: searchFocusNode,
                     onChanged: _filterSearchResults,
+                    cursorColor: Appcolors.themeColor,
                     decoration: InputDecoration(
                       hintText: 'Search',
                       hintStyle: TextStyle(
@@ -60,7 +61,12 @@ class Homepage extends StatelessWidget {
                         fontSize: 15,
                         color: Appcolors.hintColor,
                       ),
-                      prefixIcon: const Icon(Icons.search),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: SvgPicture.asset(
+                          'assets/svg/searchicon.svg',
+                        ),
+                      ),
                       suffixIcon: Container(
                         margin:
                             const EdgeInsets.only(right: 6, top: 6, bottom: 6),
@@ -135,7 +141,8 @@ class Homepage extends StatelessWidget {
                                         GestureDetector(
                                           onTap: () {
                                             controller.selectedItems.clear();
-                                            controller.medicalSearchDetails.clear();
+                                            controller.medicalSearchDetails
+                                                .clear();
                                           },
                                           child: Text(
                                             'Refresh',
@@ -276,12 +283,12 @@ class Homepage extends StatelessWidget {
                             Align(
                               alignment: Alignment.center,
                               child: SvgPicture.asset(
-                                  'assets/svg/backgroundimg.svg'),
+                                  'assets/svg/backgroundimg.svg',height: MediaQuery.of(context).size.height*0.25,),
                             ),
                             Align(
                               alignment: Alignment.center,
                               child:
-                                  SvgPicture.asset('assets/svg/bgobjects.svg'),
+                                  SvgPicture.asset('assets/svg/bgobjects.svg',height:  MediaQuery.of(context).size.height*0.2,),
                             ),
                           ],
                         ),
@@ -321,6 +328,7 @@ class Homepage extends StatelessWidget {
                             children: [
                               Text(
                                 heading,
+                                textAlign: TextAlign.justify,
                                 style: TextStyle(
                                     color: Appcolors.TextColor,
                                     fontSize: 20,
@@ -339,6 +347,7 @@ class Homepage extends StatelessWidget {
                               ),
                               Text(
                                 phone,
+                                textAlign: TextAlign.start,
                                 style: TextStyle(
                                     color: Appcolors.TextColor,
                                     fontSize: 14,
@@ -346,6 +355,7 @@ class Homepage extends StatelessWidget {
                               ),
                               Text(
                                 web,
+                                textAlign: TextAlign.justify,
                                 style: TextStyle(
                                     color: Appcolors.TextColor,
                                     fontSize: 14,
@@ -427,12 +437,11 @@ class Homepage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.search,
+                            SvgPicture.asset(
+                              'assets/svg/searchicon.svg',
                               color: Appcolors.themeColor,
-                              size: 30,
                             ),
-                            const SizedBox(width: 5),
+                            const SizedBox(width: 15),
                             Text(
                               'Find Resources',
                               style: TextStyle(

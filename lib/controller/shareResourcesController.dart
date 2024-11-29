@@ -53,6 +53,29 @@ class ShareResourcesController extends GetxController {
         .removeAt(index + 1); // +1 because phone1Controller is at index 0
   }
 
+  // Clear all fields and reset lists
+  void clearAll() {
+    // Clear static fields
+    notesController.clear();
+    phone1Controller.clear();
+    emailController.clear();
+
+    // Dispose and clear dynamic fields
+    for (var controller in additionalPhoneControllers) {
+      controller.dispose();
+    }
+    for (var focusNode in additionalPhoneFocusNodes) {
+      focusNode.dispose();
+    }
+
+    additionalPhoneControllers.clear();
+    additionalPhoneFocusNodes.clear();
+    allPhoneControllers.clear();
+
+    // Reinitialize the combined list with phone1Controller
+    allPhoneControllers.add(phone1Controller);
+  }
+
   @override
   void onClose() {
     // Dispose static controllers and focus nodes

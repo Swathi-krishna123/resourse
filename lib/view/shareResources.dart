@@ -10,11 +10,11 @@ class ShareResources extends StatelessWidget {
 
   final ShareResourcesController controller =
       Get.put(ShareResourcesController());
-    final  _formkey =GlobalKey<FormState>();
+  final _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    Appcontroller appcontroller=Get.put(Appcontroller());
+    Appcontroller appcontroller = Get.put(Appcontroller());
     return Scaffold(
       appBar: Customwidgets().customAppbar(),
       body: Container(
@@ -23,7 +23,8 @@ class ShareResources extends StatelessWidget {
           color: Colors.white,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
           child: SingleChildScrollView(
             child: Form(
               key: _formkey,
@@ -49,60 +50,104 @@ class ShareResources extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Divider(color: Appcolors.hintColor),
+                  Divider(color: Appcolors.hintColor.withOpacity(0.44)),
                   const SizedBox(height: 10),
                   Customwidgets().contentsharefields(
                     hintText: 'Enter your notes',
                     labelText: 'Notes',
                     controller: controller.notesController,
                     focusNode: controller.notesFocusNode,
-                    validator: (value) {
-                      if(value == null || value.isEmpty){
-                        return "required field";
-                      }return null;
-                      
-                    },
                   ),
                   const SizedBox(height: 10),
                   Customwidgets().contentsharefields(
-                    hintText: '( +1 ) XXXXX XXXXX',
+                    hintText: '( 1 )  XXXXX XXXXX',
                     labelText: 'Phone 1',
                     controller: controller.phone1Controller,
                     focusNode: controller.phone1FocusNode,
                     validator: (value) {
-                      if(value == null || value.isEmpty){
-                        return "required field";
-                      }return null;
-                      
+                      if (value == null || value.isEmpty) {
+                        return "Phone number is required";
+                      }
+
+                      // Ensure the value starts with a country code (1–4 digits)
+                      if (!RegExp(r'^\d{1,4}\d{7,15}$').hasMatch(value)) {
+                        return "Enter a valid phone number with country code";
+                      }
+
+                      // Check if the country code is valid (optional)
+                      final validCountryCodes = [
+                        "1", "91", "44", "86", "20", // Add more as needed
+                      ];
+                      String countryCode = value.substring(
+                          0,
+                          value.length -
+                              10); // Assuming last 10 digits are phone number
+                      if (!validCountryCodes.contains(countryCode)) {
+                        return "Invalid country code";
+                      }
+
+                      return null; // Valid input
                     },
                   ),
-                  const SizedBox(height: 10),
                   Obx(
                     () => Column(
                       children: List.generate(
                         controller.additionalPhoneControllers.length,
                         (index) => Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(top: 10),
                           child: Row(
                             children: [
                               Expanded(
                                 child: Customwidgets().contentsharefields(
-                                    hintText: '( +1 ) XXXXX XXXXX',
+                                    hintText: '( 1 )  XXXXX XXXXX',
                                     labelText: 'Phone ${index + 2}',
                                     controller: controller
                                         .additionalPhoneControllers[index],
                                     focusNode: controller
                                         .additionalPhoneFocusNodes[index],
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Phone number is required";
+                                      }
+
+                                      // Ensure the value starts with a country code (1–4 digits)
+                                      if (!RegExp(r'^\d{1,4}\d{7,15}$')
+                                          .hasMatch(value)) {
+                                        return "Enter a valid phone number with country code";
+                                      }
+
+                                      // Check if the country code is valid (optional)
+                                      final validCountryCodes = [
+                                        "1", "91", "44", "86",
+                                        "20", // Add more as needed
+                                      ];
+                                      String countryCode = value.substring(
+                                          0,
+                                          value.length -
+                                              10); // Assuming last 10 digits are phone number
+                                      if (!validCountryCodes
+                                          .contains(countryCode)) {
+                                        return "Invalid country code";
+                                      }
+
+                                      return null; // Valid input
+                                    },
                                     suffixIcon: Container(
-                                        padding:
-                                            const EdgeInsets.symmetric(vertical: 5),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5),
                                         decoration: BoxDecoration(
-                                            color: Appcolors.themeColor.withOpacity(0.70),
+                                            color: Appcolors.themeColor
+                                                .withOpacity(0.70),
                                             borderRadius:
-                                                BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10))),
+                                                const BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10))),
                                         child: TextButton(
                                             onPressed: () {
-                                              controller.removePhoneField(index);
+                                              controller
+                                                  .removePhoneField(index);
                                             },
                                             child: const Text(
                                               'Cancel',
@@ -119,22 +164,31 @@ class ShareResources extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: controller.addPhoneField,
-                    child: const Text('Add +'),
+                    child: Text(
+                      'Add +',
+                      style: TextStyle(color: Appcolors.themeColor),
+                    ),
                   ),
                   Customwidgets().contentsharefields(
-                    hintText: 'abcd@gmail.com',
+                    hintText: 'abcd1234@gmail.com',
                     labelText: 'Email',
                     controller: controller.emailController,
                     focusNode: controller.emailFocusNode,
-                    
                   ),
                   const SizedBox(height: 50),
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        if(_formkey.currentState!.validate()){
-                          appcontroller.sendResources();
-                          Get.toNamed('/');
+                        try {
+                          if (_formkey.currentState!.validate()) {
+                            appcontroller.sendResources();
+                            Get.toNamed('/');
+                            appcontroller.selectedItems.clear();
+                            appcontroller.medicalSearchDetails.clear();
+                            controller.clearAll();
+                          }
+                        } catch (e) {
+                          Get.snackbar('Error', e.toString());
                         }
                       },
                       child: Container(

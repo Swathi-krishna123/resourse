@@ -70,8 +70,8 @@ class Appcontroller extends GetxController {
       var ids = selectedItems.map((item) => item['id']).toList();
       var formattedIds = ids.join(', ');
 
-      log('ids: $ids');
-      print('{"T": "c1", "V": "$ids"},');
+      // log('ids: $ids');
+      // print('{"T": "c1", "V": "$ids"},');
 
       isLoading.value = true; // Start loading
 
@@ -158,9 +158,9 @@ class Appcontroller extends GetxController {
               number.isNotEmpty && RegExp(r'^\d+$').hasMatch(number))
           .toList();
       var phoneNumbersExtracted = phoneNumbers.join(', ');
-      log('phoneNumbersExtracted=============$phoneNumbersExtracted');
+      // log('phoneNumbersExtracted=============$phoneNumbersExtracted');
 
-      log('Valid phone numbers: $phoneNumbers');
+      // log('Valid phone numbers: $phoneNumbers');
       isLoading.value = true; // Start loading
       var ids = medicalSearchDetails.map((item) => item['id']).toList();
       var medicalSearchDetailsid = ids.join(', ');
