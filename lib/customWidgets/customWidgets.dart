@@ -6,6 +6,10 @@ class Customwidgets {
   AppBar customAppbar() {
     return AppBar(
       automaticallyImplyLeading: false,
+      backgroundColor: Appcolors.backgroundColor,
+      shadowColor: Colors.transparent,
+      foregroundColor: Appcolors.backgroundColor,
+      surfaceTintColor: Appcolors.backgroundColor,
       title: Text.rich(
         TextSpan(
           children: [

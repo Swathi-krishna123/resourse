@@ -99,7 +99,7 @@ class ShareResources extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             color: Appcolors.themeColor.withOpacity(0.70),
                                             borderRadius:
-                                                BorderRadius.circular(10)),
+                                                BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10))),
                                         child: TextButton(
                                             onPressed: () {
                                               controller.removePhoneField(index);

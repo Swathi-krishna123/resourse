@@ -70,9 +70,12 @@ class Homepage extends StatelessWidget {
                           color: Appcolors.themeColor.withOpacity(0.14),
                         ),
                         child: Center(
-                          child: SvgPicture.asset(
-                            'assets/svg/searchPrefixicon.svg',
-                            height: 20,
+                          child: GestureDetector(
+                            onTap: () => searchboxEnable.value = true,
+                            child: SvgPicture.asset(
+                              'assets/svg/searchPrefixicon.svg',
+                              height: 20,
+                            ),
                           ),
                         ),
                       ),
@@ -91,7 +94,8 @@ class Homepage extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Obx(
-                  () => controller.selectedItems.isEmpty
+                  () => controller.medicalSearchDetails.isEmpty ||
+                          searchboxEnable.value == true
                       ? const SizedBox.shrink()
                       : Column(
                           children: [
@@ -147,40 +151,42 @@ class Homepage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => ShareResources());
-                                  },
-                                  child: Container(
-                                    height: 42,
-                                    width: 240,
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => ShareResources());
+                                      controller.onClose();
+                                    },
+                                    child: Container(
+                                      height: 42,
 
-                                    // Add margin between items
-                                    decoration: BoxDecoration(
-                                      color: Appcolors.themeColor
-                                          .withOpacity(0.14),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                            'assets/svg/sendicon.svg'),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          'Share Resources',
-                                          style: TextStyle(
-                                            color: Appcolors.blackColor,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
+                                      // Add margin between items
+                                      decoration: BoxDecoration(
+                                        color: Appcolors.themeColor
+                                            .withOpacity(0.14),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                              'assets/svg/sendicon.svg'),
+                                          const SizedBox(
+                                            width: 10,
                                           ),
-                                        ),
-                                      ],
+                                          Text(
+                                            'Share Resources',
+                                            style: TextStyle(
+                                              color: Appcolors.blackColor,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -200,14 +206,15 @@ class Homepage extends StatelessWidget {
                 ),
 
                 // Selected Items Display
-                // Selected Items Display
                 Obx(() {
                   if (controller.selectedItems.isEmpty) {
                     return const SizedBox
                         .shrink(); // No display if no items selected
                   }
                   return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal, // Scroll horizontally
+                    scrollDirection: Axis.horizontal,
+                    physics:
+                        const BouncingScrollPhysics(), // Scroll horizontally
                     child: Row(
                       children: controller.selectedItems.map((item) {
                         final name = item['nm'] ?? 'Unknown Name';
@@ -303,10 +310,10 @@ class Homepage extends StatelessWidget {
                       itemCount: controller.medicalSearchDetails.length,
                       itemBuilder: (context, index) {
                         final items = controller.medicalSearchDetails[index];
-                        final heading = items["tl"] ?? 'unknown';
-                        final details = items["dc"] ?? 'unknown';
-                        final phone = items["ph"] ?? 'unknown';
-                        final web = items["wb"] ?? 'unknown';
+                        final heading = items["tl"] ?? '';
+                        final details = items["dc"] ?? '';
+                        final phone = items["ph"] ?? '';
+                        final web = items["wb"] ?? '';
                         return Container(
                           margin: const EdgeInsetsDirectional.all(20),
                           child: Column(
@@ -364,7 +371,10 @@ class Homepage extends StatelessWidget {
                           );
 
                           return CheckboxListTile(
-                            title: Text(name),
+                            title: Text(
+                              name,
+                              style: TextStyle(color: Appcolors.TextColor),
+                            ),
                             value: isSelected,
                             selected: true,
                             activeColor: Appcolors.themeColor,
@@ -405,8 +415,8 @@ class Homepage extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       margin: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Appcolors.themeColor.withOpacity(0.14),
-                      ),
+                          color: Appcolors.themeColor.withOpacity(0.14),
+                          borderRadius: BorderRadius.circular(10)),
                       child: GestureDetector(
                         onTap: () async {
                           // Log selected items (already being shown in the box)
