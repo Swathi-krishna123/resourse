@@ -79,7 +79,7 @@ class ShareResources extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 10),
-                Divider(color: Appcolors.hintColor.withOpacity(0.44)),
+                Divider(color: Appcolors.themeColor.withOpacity(0.14)),
                 const SizedBox(height: 15),
 
                 // Notes Field
@@ -227,13 +227,16 @@ class ShareResources extends StatelessWidget {
                           appcontroller.isSuccess.value = false;
 
                           await appcontroller.sendResources();
-                          appcontroller.selectedItems.clear();
-                          appcontroller.medicalSearchDetails.clear();
 
                           // Mark as success
                           appcontroller.isSuccess.value = true;
                           // Show success and navigate back
                           await Future.delayed(const Duration(seconds: 3));
+                          // appcontroller.selectedItems.clear();
+                          // appcontroller.medicalSearchDetails.clear();
+                          // appcontroller.filteredMedicalSearch.refresh();
+                          appcontroller.refreshData();
+
                           Get.toNamed('/');
                           await Future.delayed(const Duration(seconds: 1));
                           controller.clearAll();

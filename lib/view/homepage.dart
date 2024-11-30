@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:resource_plus/constants/colors.dart';
 import 'package:resource_plus/controller/appcontroller.dart';
-import 'package:resource_plus/controller/shareResourcesController.dart';
 import 'package:resource_plus/customWidgets/customWidgets.dart';
 import 'package:resource_plus/view/shareResources.dart';
 
@@ -12,7 +11,7 @@ class Homepage extends StatelessWidget {
   Homepage({super.key});
 
   final Appcontroller appController = Get.put(Appcontroller());
-  final TextEditingController _searchController = TextEditingController();
+
   FocusNode searchFocusNode = FocusNode();
   var searchboxEnable = false.obs;
 
@@ -52,7 +51,7 @@ class Homepage extends StatelessWidget {
                     onTap: () {
                       searchboxEnable.value = true;
                     },
-                    controller: _searchController,
+                    controller: appController.searchController,
                     focusNode: searchFocusNode,
                     onChanged: _filterSearchResults,
                     cursorColor: Appcolors.themeColor,
@@ -119,7 +118,8 @@ class Homepage extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    appController.medicalSearchDetails.refresh();
+                                    appController.medicalSearchDetails
+                                        .refresh();
                                   },
                                   child: Container(
                                     height: 42,
@@ -146,9 +146,7 @@ class Homepage extends StatelessWidget {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            appController.selectedItems.clear();
-                                            appController.medicalSearchDetails
-                                                .clear();
+                                            appController.refreshData();
                                           },
                                           child: Text(
                                             'Refresh',
@@ -258,7 +256,8 @@ class Homepage extends StatelessWidget {
                               GestureDetector(
                                   onTap: () {
                                     // Remove the item when delete icon is clicked
-                                    appController.removeMedicalSearchDetails(item);
+                                    appController
+                                        .removeMedicalSearchDetails(item);
                                   },
                                   child: SvgPicture.asset(
                                       'assets/svg/deleteicon.svg')),
@@ -443,6 +442,7 @@ class Homepage extends StatelessWidget {
                           // Log selected items (already being shown in the box)
                           log("Proceed with selected items: ${appController.selectedItems}");
                           appController.fetchMedicalSearchDetails();
+                          appController.searchController.clear();
                           searchboxEnable.value = false;
                         },
                         child: Row(

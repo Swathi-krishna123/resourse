@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:resource_plus/controller/shareResourcesController.dart';
 import 'package:resource_plus/utilities/diohandler.dart';
 
 class Appcontroller extends GetxController {
+  TextEditingController searchController = TextEditingController();
   // Observables for state management
   var isLoading = false.obs;
   var medicalSearch = <Map<String, dynamic>>[].obs; // Strongly typed list
@@ -133,11 +135,12 @@ class Appcontroller extends GetxController {
       // Remove from selectedItems
       selectedItems.removeWhere((element) => element['id'] == item['id']);
       selectedItems.refresh();
+      searchController.clear();
 
       // Remove from medicalSearchDetails
       medicalSearchDetails.removeWhere(
           (element) => element[formattedIds] == item[formattedIds]);
-      // medicalSearchDetails.refresh();
+      medicalSearchDetails.refresh();
 
       // Log the updated lists for debugging
       log("Updated selectedItems: ${selectedItems.map((e) => e['id']).toList()}");
@@ -207,6 +210,29 @@ class Appcontroller extends GetxController {
       Get.snackbar('Error', 'An unexpected error occurred');
     } finally {
       isLoading.value = false; // Stop loading
+    }
+  }
+
+  void refreshData() {
+    try {
+      log("Refreshing data...");
+
+      // Clear existing data
+      medicalSearch.clear();
+      medicalSearchDetails.clear();
+      filteredMedicalSearch.clear();
+      selectedItems.clear();
+
+      // Reset observables
+      isLoading.value = false;
+      isSuccess.value = false;
+      // Clear the search field
+      searchController.clear();
+      // Fetch data again
+      fetchMedicalSearch();
+    } catch (e, stackTrace) {
+      log('Error during refresh: ${e.toString()}', stackTrace: stackTrace);
+      Get.snackbar('Error', 'An unexpected error occurred while refreshing');
     }
   }
 }
