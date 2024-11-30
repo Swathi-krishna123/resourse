@@ -65,7 +65,8 @@ class Customwidgets {
     Widget? suffixIcon,
   }) {
     return Stack(
-      alignment: Alignment.topLeft,
+      alignment: Alignment.centerLeft,
+      clipBehavior: Clip.none,
       children: [
         TextFormField(
           cursorColor: Appcolors.themeColor,
@@ -74,6 +75,7 @@ class Customwidgets {
           focusNode: focusNode,
           onFieldSubmitted: (value) => onFocusChange,
           decoration: InputDecoration(
+           
             suffixIcon: suffixIcon,
             hintText: hintText,
             hintStyle: TextStyle(
@@ -98,18 +100,22 @@ class Customwidgets {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
+              borderSide:
+                  const BorderSide(color: Color.fromARGB(255, 182, 48, 38)),
             ),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
           ),
         ),
         Positioned(
           left: 12,
-          top: -5,
+          top: -10,
           child: Container(
             color: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
               labelText!,
-              style: const TextStyle(
+              style:  const TextStyle(
                 color: Color(0xff7A7A7A),
                 fontSize: 14,
                 fontWeight: FontWeight.w500,

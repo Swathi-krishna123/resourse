@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:resource_plus/controller/appcontroller.dart';
 
 class ShareResourcesController extends GetxController {
   // Controllers for static fields
@@ -20,9 +21,12 @@ class ShareResourcesController extends GetxController {
 
   @override
   void onInit() {
+    Appcontroller appcontroller = Get.put(Appcontroller());
     super.onInit();
     // Initialize the combined list with the static phone controller
     allPhoneControllers.add(phone1Controller);
+    appcontroller.isLoading.value = false;
+    appcontroller.isSuccess.value = false;
   }
 
   // Add a new phone field

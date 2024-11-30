@@ -4,13 +4,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:resource_plus/constants/colors.dart';
 import 'package:resource_plus/controller/appcontroller.dart';
+import 'package:resource_plus/controller/shareResourcesController.dart';
 import 'package:resource_plus/customWidgets/customWidgets.dart';
 import 'package:resource_plus/view/shareResources.dart';
 
 class Homepage extends StatelessWidget {
   Homepage({super.key});
 
-  final Appcontroller controller = Get.put(Appcontroller());
+  final Appcontroller appController = Get.put(Appcontroller());
   final TextEditingController _searchController = TextEditingController();
   FocusNode searchFocusNode = FocusNode();
   var searchboxEnable = false.obs;
@@ -18,16 +19,16 @@ class Homepage extends StatelessWidget {
   // Filter search results based on query
   void _filterSearchResults(String query) {
     if (query.isEmpty) {
-      controller.filteredMedicalSearch.clear(); // Ensure list is empty
+      appController.filteredMedicalSearch.clear(); // Ensure list is empty
     } else {
-      controller.filteredMedicalSearch.assignAll(
-        controller.medicalSearch.where((item) {
+      appController.filteredMedicalSearch.assignAll(
+        appController.medicalSearch.where((item) {
           final name = (item['nm'] ?? '').toString().toLowerCase();
           return name.contains(query.toLowerCase());
         }).toList(),
       );
     }
-    controller.filteredMedicalSearch.refresh();
+    appController.filteredMedicalSearch.refresh();
   }
 
   @override
@@ -39,7 +40,8 @@ class Homepage extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 20,right: 20,bottom: 10,top: 5),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -95,12 +97,16 @@ class Homepage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(color: Appcolors.themeColor),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Appcolors.themeColor),
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 5),
                 Obx(
-                  () => controller.medicalSearchDetails.isEmpty ||
+                  () => appController.medicalSearchDetails.isEmpty ||
                           searchboxEnable.value == true
                       ? const SizedBox.shrink()
                       : Column(
@@ -113,7 +119,7 @@ class Homepage extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    controller.medicalSearchDetails.refresh();
+                                    appController.medicalSearchDetails.refresh();
                                   },
                                   child: Container(
                                     height: 42,
@@ -140,8 +146,8 @@ class Homepage extends StatelessWidget {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            controller.selectedItems.clear();
-                                            controller.medicalSearchDetails
+                                            appController.selectedItems.clear();
+                                            appController.medicalSearchDetails
                                                 .clear();
                                           },
                                           child: Text(
@@ -161,7 +167,7 @@ class Homepage extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () {
                                       Get.to(() => ShareResources());
-                                      controller.onClose();
+                                      appController.onClose();
                                     },
                                     child: Container(
                                       height: 42,
@@ -213,7 +219,7 @@ class Homepage extends StatelessWidget {
 
                 // Selected Items Display
                 Obx(() {
-                  if (controller.selectedItems.isEmpty) {
+                  if (appController.selectedItems.isEmpty) {
                     return const SizedBox
                         .shrink(); // No display if no items selected
                   }
@@ -222,7 +228,7 @@ class Homepage extends StatelessWidget {
                     physics:
                         const BouncingScrollPhysics(), // Scroll horizontally
                     child: Row(
-                      children: controller.selectedItems.map((item) {
+                      children: appController.selectedItems.map((item) {
                         final name = item['nm'] ?? 'Unknown Name';
                         return Container(
                           padding: const EdgeInsets.symmetric(
@@ -232,7 +238,7 @@ class Homepage extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                                color: Appcolors.themeColor.withOpacity(0.44)),
+                                color: Appcolors.blackColor.withOpacity(0.44)),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -252,7 +258,7 @@ class Homepage extends StatelessWidget {
                               GestureDetector(
                                   onTap: () {
                                     // Remove the item when delete icon is clicked
-                                    controller.removeMedicalSearchDetails(item);
+                                    appController.removeMedicalSearchDetails(item);
                                   },
                                   child: SvgPicture.asset(
                                       'assets/svg/deleteicon.svg')),
@@ -270,7 +276,7 @@ class Homepage extends StatelessWidget {
           // List or Placeholder
           Expanded(
             child: Obx(() {
-              if (controller.filteredMedicalSearch.isEmpty) {
+              if (appController.filteredMedicalSearch.isEmpty) {
                 // Placeholder shown when no search results
                 return Center(
                   child: SingleChildScrollView(
@@ -283,12 +289,18 @@ class Homepage extends StatelessWidget {
                             Align(
                               alignment: Alignment.center,
                               child: SvgPicture.asset(
-                                  'assets/svg/backgroundimg.svg',height: MediaQuery.of(context).size.height*0.25,),
+                                'assets/svg/backgroundimg.svg',
+                                height:
+                                    MediaQuery.of(context).size.height * 0.25,
+                              ),
                             ),
                             Align(
                               alignment: Alignment.center,
-                              child:
-                                  SvgPicture.asset('assets/svg/bgobjects.svg',height:  MediaQuery.of(context).size.height*0.2,),
+                              child: SvgPicture.asset(
+                                'assets/svg/bgobjects.svg',
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                              ),
                             ),
                           ],
                         ),
@@ -309,13 +321,13 @@ class Homepage extends StatelessWidget {
               }
 
               // Show filtered search results
-              return controller.medicalSearchDetails.isNotEmpty &&
+              return appController.medicalSearchDetails.isNotEmpty &&
                       searchboxEnable == false
                   ? ListView.builder(
                       shrinkWrap: true,
-                      itemCount: controller.medicalSearchDetails.length,
+                      itemCount: appController.medicalSearchDetails.length,
                       itemBuilder: (context, index) {
-                        final items = controller.medicalSearchDetails[index];
+                        final items = appController.medicalSearchDetails[index];
                         final heading = items["tl"] ?? '';
                         final details = items["dc"] ?? '';
                         final phone = items["ph"] ?? '';
@@ -367,15 +379,15 @@ class Homepage extends StatelessWidget {
                       })
                   : ListView.builder(
                       shrinkWrap: true,
-                      itemCount: controller.filteredMedicalSearch.length,
+                      itemCount: appController.filteredMedicalSearch.length,
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
-                        final item = controller.filteredMedicalSearch[index];
+                        final item = appController.filteredMedicalSearch[index];
                         final name = item['nm'] ?? 'Unknown Name';
 
                         return Obx(() {
                           // Check if the current item is selected
-                          final isSelected = controller.selectedItems.any(
+                          final isSelected = appController.selectedItems.any(
                             (selectedItem) => selectedItem['id'] == item['id'],
                           );
 
@@ -390,20 +402,20 @@ class Homepage extends StatelessWidget {
                             onChanged: (bool? value) {
                               if (value == true) {
                                 // Add the item if it is not already selected
-                                controller.selectedItems.add(item);
+                                appController.selectedItems.add(item);
                               } else {
                                 // Remove the item if it is already selected
-                                controller.selectedItems.removeWhere(
+                                appController.selectedItems.removeWhere(
                                   (selectedItem) =>
                                       selectedItem['id'] == item['id'],
                                 );
                               }
 
                               // Log the current selection for debugging
-                              log("Selected items: ${controller.selectedItems.map((e) => e['id'])}");
+                              log("Selected items: ${appController.selectedItems.map((e) => e['id'])}");
 
                               // Notify the UI of changes
-                              controller.selectedItems.refresh();
+                              appController.selectedItems.refresh();
                             },
                           );
                         });
@@ -414,11 +426,11 @@ class Homepage extends StatelessWidget {
 
           // Conditional Button at the Bottom
           Obx(() {
-            return controller.medicalSearchDetails.isNotEmpty &&
+            return appController.medicalSearchDetails.isNotEmpty &&
                     searchboxEnable == false
                 ? const SizedBox()
                 : Visibility(
-                    visible: controller.selectedItems.isNotEmpty ||
+                    visible: appController.selectedItems.isNotEmpty ||
                         searchboxEnable == true,
                     child: Container(
                       padding: const EdgeInsets.all(10),
@@ -429,8 +441,8 @@ class Homepage extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () async {
                           // Log selected items (already being shown in the box)
-                          log("Proceed with selected items: ${controller.selectedItems}");
-                          controller.fetchMedicalSearchDetails();
+                          log("Proceed with selected items: ${appController.selectedItems}");
+                          appController.fetchMedicalSearchDetails();
                           searchboxEnable.value = false;
                         },
                         child: Row(

@@ -11,11 +11,14 @@ class Appcontroller extends GetxController {
       <Map<String, dynamic>>[].obs; // Strongly typed list
   var filteredMedicalSearch = <Map<String, dynamic>>[].obs;
   var selectedItems = <Map<String, dynamic>>[].obs;
+  var isSuccess = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     fetchMedicalSearch();
+    isLoading.value = false;
+    isSuccess.value = false;
   }
 
   Future<void> fetchMedicalSearch() async {
@@ -192,7 +195,7 @@ class Appcontroller extends GetxController {
       var response = await DioHandler.readMedical(body: body);
 
       // Check if the response is valid
-      if (response['Status'] == 1 || response['Status'] == -1 ) {
+      if (response['Status'] == 1 || response['Status'] == -1) {
         log('success');
         log('response:$response');
         Get.snackbar('Send', 'Message Send Successfully');
