@@ -58,7 +58,7 @@ class ShareResources extends StatelessWidget {
                       },
                       child: Container(
                         height: 35,
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
                         decoration: BoxDecoration(
                           color: Appcolors.themeColor.withOpacity(0.14),
                           borderRadius: BorderRadius.circular(10),
@@ -66,6 +66,7 @@ class ShareResources extends StatelessWidget {
                         child: Center(
                           child: Text(
                             'Add Phone Number',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Appcolors.blackColor,
                               fontSize: 14,
