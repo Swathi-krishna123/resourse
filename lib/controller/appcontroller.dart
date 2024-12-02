@@ -8,11 +8,12 @@ class Appcontroller extends GetxController {
   TextEditingController searchController = TextEditingController();
   // Observables for state management
   var isLoading = false.obs;
-  var medicalSearch = <Map<String, dynamic>>[].obs; // Strongly typed list
+  var medicalSearch = <Map<String, dynamic>>[].obs; // list of items
   var medicalSearchDetails =
-      <Map<String, dynamic>>[].obs; // Strongly typed list
-  var filteredMedicalSearch = <Map<String, dynamic>>[].obs;
-  var selectedItems = <Map<String, dynamic>>[].obs;
+      <Map<String, dynamic>>[].obs; // list of medical search details
+  var filteredMedicalSearch =
+      <Map<String, dynamic>>[].obs; //  list of selected items
+  var selectedItems = <Map<String, dynamic>>[].obs; //
   var isSuccess = false.obs;
 
   @override
@@ -69,8 +70,10 @@ class Appcontroller extends GetxController {
     }
   }
 
+//===============================================================
+
   Future<void> fetchMedicalSearchDetails() async {
-    log('medical search map ${selectedItems}');
+    // log('medical search map ${selectedItems}');
     try {
       var ids = selectedItems.map((item) => item['id']).toList();
       var formattedIds = ids.join(', ');
@@ -97,14 +100,17 @@ class Appcontroller extends GetxController {
       // Check if the response is valid
       if (response['Status'] == 1) {
         var data = response['DTable'];
-        log("Response data: $data");
+        // log("Response data: $data");
 
         // Validate and update `medicalSearch`
         if (data != null && data.isNotEmpty) {
           medicalSearchDetails
               .assignAll(List<Map<String, dynamic>>.from(data[0] ?? []));
           // filteredMedicalSearch.assignAll(medicalSearch);
-          log("medicalSearchDetails ${medicalSearchDetails}");
+          log("medicalSearchDetails $medicalSearchDetails");
+          List<int> mids =
+              medicalSearchDetails.map((entry) => entry["id"] as int).toList();
+          log("medical search details ids $mids");
 
           // // Log IDs for debugging
           // for (var item in medicalSearch) {
@@ -124,9 +130,14 @@ class Appcontroller extends GetxController {
     }
   }
 
+  //==============================================================
+
+  //=============================================================
+
   void removeMedicalSearchDetails(Map<String, dynamic> item) async {
     var ids = selectedItems.map((item) => item['id']).toList();
     var formattedIds = ids.join(', ');
+
     try {
       // Log the item to be removed
       log("Removing item with id: ${item['id']}");
@@ -143,13 +154,22 @@ class Appcontroller extends GetxController {
       medicalSearchDetails.refresh();
 
       // Log the updated lists for debugging
+      log("selected items ------$selectedItems");
+      log("selected medical search details-----------$medicalSearchDetails");
       log("Updated selectedItems: ${selectedItems.map((e) => e['id']).toList()}");
       log("Updated medicalSearchDetails: ${medicalSearchDetails.map((e) => e['id']).toList()}");
       log("medical search details id ----$ids");
+      log("formatted id ----$formattedIds");
+
+      if(selectedItems.isEmpty){
+        fetchMedicalSearch();
+      }
     } catch (e) {
       log("Error removing item: $e");
     }
   }
+
+  //==============================================================
 
   // send resources/////////////
 
@@ -213,6 +233,8 @@ class Appcontroller extends GetxController {
     }
   }
 
+  //=================================================================
+
   void refreshData() {
     try {
       log("Refreshing data...");
@@ -235,4 +257,6 @@ class Appcontroller extends GetxController {
       Get.snackbar('Error', 'An unexpected error occurred while refreshing');
     }
   }
+
+  // ===============================================================
 }
