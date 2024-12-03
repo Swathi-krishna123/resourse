@@ -11,6 +11,7 @@ class Homepage extends StatelessWidget {
   Homepage({super.key});
 
   final Appcontroller appController = Get.put(Appcontroller());
+  ScrollController scrollController = ScrollController();
 
   FocusNode searchFocusNode = FocusNode();
   var searchboxEnable = false.obs;
@@ -376,49 +377,67 @@ class Homepage extends StatelessWidget {
                           ),
                         );
                       })
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: appController.filteredMedicalSearch.length,
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final item = appController.filteredMedicalSearch[index];
-                        final name = item['nm'] ?? 'Unknown Name';
+                  : ScrollbarTheme(
+                      data: ScrollbarThemeData(
+                        thumbColor: WidgetStatePropertyAll(
+                            Appcolors.TextColor.withOpacity(0.44)),
+                      ),
+                      child: Scrollbar(
+                        controller: scrollController,
+                        thickness: 5,
+                        thumbVisibility: true,
+                        trackVisibility: true,
+                        interactive: true,
+                        radius: const Radius.circular(10),
+                        child: ListView.builder(
+                          controller: scrollController,
+                          shrinkWrap: true,
+                          itemCount: appController.filteredMedicalSearch.length,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final item =
+                                appController.filteredMedicalSearch[index];
+                            final name = item['nm'] ?? 'Unknown Name';
 
-                        return Obx(() {
-                          // Check if the current item is selected
-                          final isSelected = appController.selectedItems.any(
-                            (selectedItem) => selectedItem['id'] == item['id'],
-                          );
+                            return Obx(() {
+                              // Check if the current item is selected
+                              final isSelected =
+                                  appController.selectedItems.any(
+                                (selectedItem) =>
+                                    selectedItem['id'] == item['id'],
+                              );
 
-                          return CheckboxListTile(
-                            title: Text(
-                              name,
-                              style: TextStyle(color: Appcolors.TextColor),
-                            ),
-                            value: isSelected,
-                            selected: true,
-                            activeColor: Appcolors.themeColor,
-                            onChanged: (bool? value) {
-                              if (value == true) {
-                                // Add the item if it is not already selected
-                                appController.selectedItems.add(item);
-                              } else {
-                                // Remove the item if it is already selected
-                                appController.selectedItems.removeWhere(
-                                  (selectedItem) =>
-                                      selectedItem['id'] == item['id'],
-                                );
-                              }
+                              return CheckboxListTile(
+                                title: Text(
+                                  name,
+                                  style: TextStyle(color: Appcolors.TextColor),
+                                ),
+                                value: isSelected,
+                                selected: true,
+                                activeColor: Appcolors.themeColor,
+                                onChanged: (bool? value) {
+                                  if (value == true) {
+                                    // Add the item if it is not already selected
+                                    appController.selectedItems.add(item);
+                                  } else {
+                                    // Remove the item if it is already selected
+                                    appController.selectedItems.removeWhere(
+                                      (selectedItem) =>
+                                          selectedItem['id'] == item['id'],
+                                    );
+                                  }
 
-                              // Log the current selection for debugging
-                              log("Selected items: ${appController.selectedItems.map((e) => e['id'])}");
+                                  // Log the current selection for debugging
+                                  log("Selected items: ${appController.selectedItems.map((e) => e['id'])}");
 
-                              // Notify the UI of changes
-                              appController.selectedItems.refresh();
-                            },
-                          );
-                        });
-                      },
+                                  // Notify the UI of changes
+                                  appController.selectedItems.refresh();
+                                },
+                              );
+                            });
+                          },
+                        ),
+                      ),
                     );
             }),
           ),
