@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:resource_plus/constants/colors.dart';
+import 'package:resource_plus/controller/appcontroller.dart';
 import 'package:resource_plus/view/homepage.dart';
 
 void main() {
   runApp(const MyApp());
+  Appcontroller().triggerAPI();
 }
 
 class MyApp extends StatelessWidget {

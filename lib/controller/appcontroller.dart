@@ -22,7 +22,29 @@ class Appcontroller extends GetxController {
     fetchMedicalSearch();
     isLoading.value = false;
     isSuccess.value = false;
+    triggerAPI();
   }
+
+  ///////////////////////////
+  void triggerAPI() async {
+    final body = {
+      "Token": "",
+      "Prokey": "pNEvkmX3nJ7pWt7hADgrxKyCu5zjLdD+7NFtSZ8LeJ8=",
+      "Tags": [
+        {"T": "Act", "V": "ANY"},
+        {"T": "Obj", "V": "CONTENTS"},
+        {"T": "c10", "V": "5"}
+      ]
+    }; // Replace with your actual body data
+    final response = await DioHandler.readMedical(body: body);
+    if (response["error"] == null) {
+      print("API Response: $response");
+    } else {
+      print("Error: ${response["error"]}");
+    }
+  }
+
+  ///////////////////////////////////////
 
   Future<void> fetchMedicalSearch() async {
     try {
@@ -161,7 +183,7 @@ class Appcontroller extends GetxController {
       log("medical search details id ----$ids");
       log("formatted id ----$formattedIds");
 
-      if(selectedItems.isEmpty){
+      if (selectedItems.isEmpty) {
         fetchMedicalSearch();
       }
     } catch (e) {
