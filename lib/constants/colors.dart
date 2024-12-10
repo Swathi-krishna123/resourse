@@ -6,4 +6,5 @@ class Appcolors {
   static Color blackColor=Color(0xff000000);
   static Color TextColor=Color(0xff3D3D3D);
   static Color hintColor=Color(0xff909090);
+  static Color text2Color=Color(0xff7A7A7A);
 }

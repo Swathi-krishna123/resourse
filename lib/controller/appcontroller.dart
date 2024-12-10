@@ -29,7 +29,7 @@ class Appcontroller extends GetxController {
   void triggerAPI() async {
     final body = {
       "Token": "",
-      "Prokey": "pNEvkmX3nJ7pWt7hADgrxKyCu5zjLdD+7NFtSZ8LeJ8=",
+      "Prokey": "",
       "Tags": [
         {"T": "Act", "V": "ANY"},
         {"T": "Obj", "V": "CONTENTS"},
