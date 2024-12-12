@@ -45,11 +45,40 @@ class Appcontroller extends GetxController {
   }
 
   ///////////////////////////////////////
+  // signup
+
+ // {"T": "Obj", "V": "SIGNUP"},
+ // {"T": "c1", "V": "emailadress"},
+ // {"T": "c2", "V": "phone"},
+ // {"T": "c3", "V": "lastname"},
+ // {"T": "c4", "V": "firstname"},
+ // {"T": "c5", "V": "password"},
+
+
+ // otp
+
+ // {"T": "obj", "V": "OTP"},
+ // {"T": "c1", "V": "emailsdress"},
+
+ // login 
+
+ // {"T": "obj", "V": "SIGNIN"},
+ // {"T": "c1", "V": "emailadress"},
+ // {"T": "c2", "V": "password"},
+
+
+  
+  ///
+  ///
+  ///
+//  void signin (){
+
+//  }
 
   Future<void> fetchMedicalSearch() async {
     try {
       isLoading.value = true; // Start loading
-
+      // "IsCrossRequest": true,
       var body = {
         "Token": "",
         "Prokey": "",

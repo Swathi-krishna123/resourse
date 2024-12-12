@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 class DioHandler {
   static final Dio dio = Dio();
   static const String baseUrl =
-      "https://rereadmedical.azurewebsites.net/sk/iin/";
+      "https://gho.azurewebsites.net/sk/iin/";
 
   static Future<dynamic> readMedical({
     required dynamic body,

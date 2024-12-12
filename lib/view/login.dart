@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:resource_plus/constants/colors.dart';
+import 'package:resource_plus/controller/appcontroller.dart';
 import 'package:resource_plus/customWidgets/customWidgets.dart';
+import 'package:resource_plus/utilities/diohandler.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
@@ -24,7 +28,10 @@ class Login extends StatelessWidget {
               SizedBox(
                 height: 50,
               ),
-              SvgPicture.asset('assets/svg/logintext.svg',height: 70,),
+              SvgPicture.asset(
+                'assets/svg/logintext.svg',
+                height: 70,
+              ),
               SizedBox(
                 height: 15,
               ),
@@ -90,10 +97,29 @@ class Login extends StatelessWidget {
                 height: 20,
               ),
               GestureDetector(
-                onTap: () {
-                  Get.offNamed('/');
-                },
-                child: Customwidgets().customContainer(text: 'Log In')),
+                  onTap: () async {
+                    Get.toNamed('/Signup');
+                    var body = {
+                      "Token": "",
+                      "Prokey": "",
+                      "Tags": [
+                        {"T": "obj", "V": "LOGIN"},
+                        {"T": "c1", "V": "swathi.gho@gmail.com"},
+                        {"T": "c2", "V": "admin"},
+                      ]
+                    };
+                    // Call the API and get the response
+                    var response = await DioHandler.readMedical(body: body);
+                    debugger;
+                    // Check if the response is valid
+                    if (response['st'] == 0) {
+                      Get.snackbar('Error', 'message');
+                    } else {
+                      Get.offNamed('/');
+                      Appcontroller().triggerAPI();
+                    }
+                  },
+                  child: Customwidgets().customContainer(text: 'Log In')),
               SizedBox(
                 height: 25,
               ),
@@ -109,9 +135,7 @@ class Login extends StatelessWidget {
                         color: Appcolors.text2Color),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Get.toNamed('/Signup');
-                    },
+                    onTap: () {},
                     child: Text(
                       ' Sign Up',
                       style: TextStyle(
