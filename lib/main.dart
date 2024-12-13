@@ -1,17 +1,19 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:resource_plus/constants/colors.dart';
-import 'package:resource_plus/controller/appcontroller.dart';
 import 'package:resource_plus/view/homepage.dart';
 import 'package:resource_plus/view/login.dart';
+import 'package:resource_plus/view/otp.dart';
 import 'package:resource_plus/view/signUp.dart';
 import 'package:resource_plus/view/splash2.dart';
 import 'package:resource_plus/view/splashScreen.dart';
 
 void main() {
+  WidgetsFlutterBinding();
   runApp(const MyApp());
-  Appcontroller().triggerAPI();
+  
 }
 
 class MyApp extends StatelessWidget {
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/Splash2', page: () => Splash2()),
         GetPage(name: '/Login', page: () => Login()),
         GetPage(name: '/Signup', page: () => Signup()),
+        GetPage(name: '/OtpScreen', page: () => OtpScreen()),
       ],
     );
   }

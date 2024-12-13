@@ -22,54 +22,32 @@ class Appcontroller extends GetxController {
     fetchMedicalSearch();
     isLoading.value = false;
     isSuccess.value = false;
-    triggerAPI();
   }
 
   ///////////////////////////
-  void triggerAPI() async {
-    final body = {
-      "Token": "",
-      "Prokey": "",
-      "Tags": [
-        {"T": "Act", "V": "ANY"},
-        {"T": "Obj", "V": "CONTENTS"},
-        {"T": "c10", "V": "5"}
-      ]
-    }; // Replace with your actual body data
-    final response = await DioHandler.readMedical(body: body);
-    if (response["error"] == null) {
-      print("API Response: $response");
-    } else {
-      print("Error: ${response["error"]}");
-    }
-  }
 
   ///////////////////////////////////////
   // signup
 
- // {"T": "Obj", "V": "SIGNUP"},
- // {"T": "c1", "V": "emailadress"},
- // {"T": "c2", "V": "phone"},
- // {"T": "c3", "V": "lastname"},
- // {"T": "c4", "V": "firstname"},
- // {"T": "c5", "V": "password"},
+  // {"T": "Obj", "V": "SIGNUP"},
+  // {"T": "c1", "V": "emailadress"},
+  // {"T": "c2", "V": "phone"},
+  // {"T": "c3", "V": "lastname"},
+  // {"T": "c4", "V": "firstname"},
+  // {"T": "c5", "V": "password"},
 
+  // otp
 
- // otp
+  // {"T": "obj", "V": "OTP"},
+  // {"T": "c1", "V": "emailsdress"},
 
- // {"T": "obj", "V": "OTP"},
- // {"T": "c1", "V": "emailsdress"},
+  // login
 
- // login 
+  // {"T": "obj", "V": "SIGNIN"},
+  // {"T": "c1", "V": "emailadress"},
+  // {"T": "c2", "V": "password"},
 
- // {"T": "obj", "V": "SIGNIN"},
- // {"T": "c1", "V": "emailadress"},
- // {"T": "c2", "V": "password"},
-
-
-  
   ///
-
 
   Future<void> fetchMedicalSearch() async {
     try {

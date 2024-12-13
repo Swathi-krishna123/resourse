@@ -34,6 +34,9 @@ class Homepage extends StatelessWidget {
   @override
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: 2),(){
+      appController.fetchMedicalSearch();
+    });
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: Customwidgets().customAppbar(),
@@ -79,7 +82,10 @@ class Homepage extends StatelessWidget {
                         ),
                         child: Center(
                           child: GestureDetector(
-                            onTap: () => searchboxEnable.value = true,
+                            onTap: () {
+                               searchboxEnable.value = true;
+                               appController.fetchMedicalSearch();
+                            },
                             child: SvgPicture.asset(
                               'assets/svg/searchPrefixicon.svg',
                               height: 20,
@@ -390,6 +396,7 @@ class Homepage extends StatelessWidget {
                         interactive: true,
                         radius: const Radius.circular(10),
                         child: ListView.builder(
+                          
                           controller: scrollController,
                           shrinkWrap: true,
                           itemCount: appController.filteredMedicalSearch.length,

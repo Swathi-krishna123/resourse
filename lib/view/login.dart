@@ -14,6 +14,7 @@ class Login extends StatelessWidget {
   final _formkey = GlobalKey<FormState>();
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
+  RxBool isLoading = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -113,13 +114,33 @@ class Login extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                GestureDetector(
-                    onTap: () {
-                      if (_formkey.currentState!.validate()) {
-                        authcontroller.login();
-                      }
-                    },
-                    child: Customwidgets().customContainer(text: 'Log In')),
+                Obx(
+                  () => GestureDetector(
+                    onTap: isLoading.value
+                        ? null // Disable tap when loading
+                        : () async {
+                            if (_formkey.currentState!.validate()) {
+                              isLoading.value = true; // Start loading
+                              try {
+                                await authcontroller
+                                    .login(); // Your async login function
+                              } catch (e) {
+                                log("Login Error: $e");
+                              } finally {
+                                isLoading.value = false; // Stop loading
+                              }
+                            }
+                          },
+                    child: isLoading.value
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Appcolors.themeColor),
+                            ),
+                          )
+                        : Customwidgets().customContainer(text: 'Log In'),
+                  ),
+                ),
                 SizedBox(
                   height: 25,
                 ),

@@ -4,13 +4,12 @@ import 'package:dio/dio.dart';
 
 class DioHandler {
   static final Dio dio = Dio();
-  static const String baseUrl = "https://gho.azurewebsites.net/sk/iin/";
-
+  static String baseUrl = "https://gho.azurewebsites.net/sk/iin/";
   static Future<dynamic> readMedical({
     required dynamic body,
   }) async {
     Map<String, dynamic> headers = {
-      "content-type": "application/json",
+      "Content-Type": "application/JSON",//json
     };
     dio.options.headers.addAll(headers);
 

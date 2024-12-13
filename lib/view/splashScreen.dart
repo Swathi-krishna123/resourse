@@ -9,7 +9,6 @@ class Splashscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Future.delayed(Duration(seconds: 3), () {
       Get.offNamed('/');
-    
     });
     return Scaffold(
       body: Center(
