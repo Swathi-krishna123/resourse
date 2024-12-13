@@ -4,8 +4,7 @@ import 'package:dio/dio.dart';
 
 class DioHandler {
   static final Dio dio = Dio();
-  static const String baseUrl =
-      "https://gho.azurewebsites.net/sk/iin/";
+  static const String baseUrl = "https://gho.azurewebsites.net/sk/iin/";
 
   static Future<dynamic> readMedical({
     required dynamic body,
@@ -14,16 +13,17 @@ class DioHandler {
       "content-type": "application/json",
     };
     dio.options.headers.addAll(headers);
-    try {
-      Response response;
 
-      response = await DioHandler.dio
+    try {
+      log("Sending request to $baseUrl with body: $body");
+      Response response = await DioHandler.dio
           .post(
             baseUrl,
             data: body,
           )
           .timeout(const Duration(seconds: 60));
-      print(response.data);
+
+      log("Response: ${response.data}");
       return response.data;
     } on DioException catch (e) {
       log("DioError: ${e.response?.data ?? e.message}");

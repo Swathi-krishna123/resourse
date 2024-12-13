@@ -69,11 +69,7 @@ class Appcontroller extends GetxController {
 
   
   ///
-  ///
-  ///
-//  void signin (){
 
-//  }
 
   Future<void> fetchMedicalSearch() async {
     try {

@@ -155,9 +155,9 @@ class Signup extends StatelessWidget {
                     child: Text(
                       '  Login',
                       style: TextStyle(
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w800,
                           fontSize: 14,
-                          color: Appcolors.TextColor),
+                          color: Appcolors.themeColor),
                     ),
                   )
                 ],

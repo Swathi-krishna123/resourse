@@ -17,7 +17,7 @@ class Splash2 extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset('assets/svg/welcomtext.svg'),
+              SvgPicture.asset('assets/svg/welcomtext.svg',height: 75,),
               SizedBox(
                 height: 15,
               ),
@@ -38,11 +38,22 @@ class Splash2 extends StatelessWidget {
               SizedBox(
                 height: 35,
               ),
-              GestureDetector(
-                  onTap: () {
-                    Get.offNamed('/Login');
-                  },
-                  child: Customwidgets().customContainer(text: 'Get Started'))
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        Get.offNamed('/Login');
+                      },
+                      child: Customwidgets()
+                          .customContainer(text: 'SIGN IN', width:MediaQuery.of(context).size.width*0.42)),
+                  GestureDetector(
+                      onTap: () {
+                        Get.offNamed('/Signup');
+                      },
+                      child: Customwidgets()
+                          .customContainer(text: 'SIGN UP', width:MediaQuery.of(context).size.width*0.42)),
+                ],
+              )
             ],
           ),
         ),

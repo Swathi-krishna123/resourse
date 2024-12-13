@@ -165,9 +165,11 @@ class Customwidgets {
 
   Container customContainer({
     String? text,
+    double? width,
   }) {
     return Container(
       height: 51,
+      width: width,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Appcolors.themeColor.withOpacity(0.14)),
