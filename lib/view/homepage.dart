@@ -32,11 +32,7 @@ class Homepage extends StatelessWidget {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 2),(){
-      appController.fetchMedicalSearch();
-    });
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: Customwidgets().customAppbar(),
@@ -60,7 +56,8 @@ class Homepage extends StatelessWidget {
                     onChanged: _filterSearchResults,
                     cursorColor: Appcolors.themeColor,
                     decoration: InputDecoration(
-                      hintText: 'Search',
+                      hintText: 'Search here',
+                      labelText: 'Search',
                       hintStyle: TextStyle(
                         fontWeight: FontWeight.w300,
                         fontSize: 15,
@@ -83,8 +80,8 @@ class Homepage extends StatelessWidget {
                         child: Center(
                           child: GestureDetector(
                             onTap: () {
-                               searchboxEnable.value = true;
-                               appController.fetchMedicalSearch();
+                              searchboxEnable.value = true;
+                              appController.fetchMedicalSearch();
                             },
                             child: SvgPicture.asset(
                               'assets/svg/searchPrefixicon.svg',
@@ -282,14 +279,77 @@ class Homepage extends StatelessWidget {
           // List or Placeholder
           Expanded(
             child: Obx(() {
-              if (appController.filteredMedicalSearch.isEmpty) {
-                // Placeholder shown when no search results
+              // if (appController.filteredMedicalSearch.isEmpty) {
+              //   // Placeholder shown when no search results
+              //   return Center(
+              //     child: SingleChildScrollView(
+              //       physics: const BouncingScrollPhysics(),
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           Stack(
+              //             children: [
+              //               Align(
+              //                 alignment: Alignment.center,
+              //                 child: SvgPicture.asset(
+              //                   'assets/svg/backgroundimg.svg',
+              //                   height:
+              //                       MediaQuery.of(context).size.height * 0.25,
+              //                 ),
+              //               ),
+              //               Align(
+              //                 alignment: Alignment.center,
+              //                 child: SvgPicture.asset(
+              //                   'assets/svg/bgobjects.svg',
+              //                   height:
+              //                       MediaQuery.of(context).size.height * 0.2,
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //           const SizedBox(height: 20),
+              //           Text(
+              //             'Search by keyword or select\ntopics from the list below',
+              //             textAlign: TextAlign.center,
+              //             style: TextStyle(
+              //               color: Appcolors.hintColor,
+              //               fontWeight: FontWeight.w400,
+              //               fontSize: 20,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   );
+              // }
+
+              // if (appController.isLoading.value) {
+              //   // Show CircularProgressIndicator when loading
+              //   return Center(
+              //     child: CircularProgressIndicator(
+              //       color: Appcolors.themeColor, // Adjust the color as needed
+              //       strokeWidth: 4.0,
+              //     ),
+              //   );
+              // }
+
+              if (appController.isLoading.value) {
+                // Show CircularProgressIndicator when data is loading
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Appcolors.themeColor, // Customizable color
+                    strokeWidth: 4.0, // Adjust thickness if needed
+                  ),
+                );
+              } else if (appController.filteredMedicalSearch.isEmpty || appController.isError.value) {
+                // Show placeholder when no data is available
                 return Center(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // Your SVG assets and placeholder content
                         Stack(
                           children: [
                             Align(
@@ -324,128 +384,130 @@ class Homepage extends StatelessWidget {
                     ),
                   ),
                 );
-              }
-
-              // Show filtered search results
-              return appController.medicalSearchDetails.isNotEmpty &&
-                      searchboxEnable == false
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: appController.medicalSearchDetails.length,
-                      itemBuilder: (context, index) {
-                        final items = appController.medicalSearchDetails[index];
-                        final heading = items["tl"] ?? '';
-                        final details = items["dc"] ?? '';
-                        final phone = items["ph"] ?? '';
-                        final web = items["wb"] ?? '';
-                        return Container(
-                          margin: const EdgeInsetsDirectional.all(20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                heading,
-                                textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                    color: Appcolors.TextColor,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                details,
-                                textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                    color: Appcolors.TextColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                phone,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Appcolors.TextColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                web,
-                                textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                    color: Appcolors.TextColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              )
-                            ],
-                          ),
-                        );
-                      })
-                  : ScrollbarTheme(
-                      data: ScrollbarThemeData(
-                        thumbColor: WidgetStatePropertyAll(
-                            Appcolors.TextColor.withOpacity(0.44)),
-                      ),
-                      child: Scrollbar(
-                        controller: scrollController,
-                        thickness: 5,
-                        thumbVisibility: true,
-                        trackVisibility: true,
-                        interactive: true,
-                        radius: const Radius.circular(10),
-                        child: ListView.builder(
-                          
-                          controller: scrollController,
-                          shrinkWrap: true,
-                          itemCount: appController.filteredMedicalSearch.length,
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final item =
-                                appController.filteredMedicalSearch[index];
-                            final name = item['nm'] ?? 'Unknown Name';
-
-                            return Obx(() {
-                              // Check if the current item is selected
-                              final isSelected =
-                                  appController.selectedItems.any(
-                                (selectedItem) =>
-                                    selectedItem['id'] == item['id'],
-                              );
-
-                              return CheckboxListTile(
-                                title: Text(
-                                  name,
-                                  style: TextStyle(color: Appcolors.TextColor),
+              } else {
+                // Show filtered search results
+                return appController.medicalSearchDetails.isNotEmpty &&
+                        searchboxEnable == false
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: appController.medicalSearchDetails.length,
+                        itemBuilder: (context, index) {
+                          final items =
+                              appController.medicalSearchDetails[index];
+                          final heading = items["tl"] ?? '';
+                          final details = items["dc"] ?? '';
+                          final phone = items["ph"] ?? '';
+                          final web = items["wb"] ?? '';
+                          return Container(
+                            margin: const EdgeInsetsDirectional.all(20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  heading,
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                      color: Appcolors.TextColor,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
                                 ),
-                                value: isSelected,
-                                selected: true,
-                                activeColor: Appcolors.themeColor,
-                                onChanged: (bool? value) {
-                                  if (value == true) {
-                                    // Add the item if it is not already selected
-                                    appController.selectedItems.add(item);
-                                  } else {
-                                    // Remove the item if it is already selected
-                                    appController.selectedItems.removeWhere(
-                                      (selectedItem) =>
-                                          selectedItem['id'] == item['id'],
-                                    );
-                                  }
-
-                                  // Log the current selection for debugging
-                                  log("Selected items: ${appController.selectedItems.map((e) => e['id'])}");
-
-                                  // Notify the UI of changes
-                                  appController.selectedItems.refresh();
-                                },
-                              );
-                            });
-                          },
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  details,
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                      color: Appcolors.TextColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  phone,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Appcolors.TextColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  web,
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                      color: Appcolors.TextColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
+                                )
+                              ],
+                            ),
+                          );
+                        })
+                    : ScrollbarTheme(
+                        data: ScrollbarThemeData(
+                          thumbColor: WidgetStatePropertyAll(
+                              Appcolors.TextColor.withOpacity(0.44)),
                         ),
-                      ),
-                    );
+                        child: Scrollbar(
+                          controller: scrollController,
+                          thickness: 5,
+                          thumbVisibility: true,
+                          trackVisibility: true,
+                          interactive: true,
+                          radius: const Radius.circular(10),
+                          child: ListView.builder(
+                            controller: scrollController,
+                            shrinkWrap: true,
+                            itemCount:
+                                appController.filteredMedicalSearch.length,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final item =
+                                  appController.filteredMedicalSearch[index];
+                              final name = item['nm'] ?? 'Unknown Name';
+
+                              return Obx(() {
+                                // Check if the current item is selected
+                                final isSelected =
+                                    appController.selectedItems.any(
+                                  (selectedItem) =>
+                                      selectedItem['id'] == item['id'],
+                                );
+
+                                return CheckboxListTile(
+                                  title: Text(
+                                    name,
+                                    style:
+                                        TextStyle(color: Appcolors.TextColor),
+                                  ),
+                                  value: isSelected,
+                                  selected: true,
+                                  activeColor: Appcolors.themeColor,
+                                  onChanged: (bool? value) {
+                                    if (value == true) {
+                                      // Add the item if it is not already selected
+                                      appController.selectedItems.add(item);
+                                    } else {
+                                      // Remove the item if it is already selected
+                                      appController.selectedItems.removeWhere(
+                                        (selectedItem) =>
+                                            selectedItem['id'] == item['id'],
+                                      );
+                                    }
+
+                                    // Log the current selection for debugging
+                                    log("Selected items: ${appController.selectedItems.map((e) => e['id'])}");
+
+                                    // Notify the UI of changes
+                                    appController.selectedItems.refresh();
+                                  },
+                                );
+                              });
+                            },
+                          ),
+                        ),
+                      );
+              }
             }),
           ),
 

@@ -8,6 +8,7 @@ class Appcontroller extends GetxController {
   TextEditingController searchController = TextEditingController();
   // Observables for state management
   var isLoading = false.obs;
+  var isError = false.obs;
   var medicalSearch = <Map<String, dynamic>>[].obs; // list of items
   var medicalSearchDetails =
       <Map<String, dynamic>>[].obs; // list of medical search details
@@ -20,7 +21,7 @@ class Appcontroller extends GetxController {
   void onInit() {
     super.onInit();
     fetchMedicalSearch();
-    isLoading.value = false;
+    // isLoading.value = false;
     isSuccess.value = false;
   }
 
@@ -49,49 +50,116 @@ class Appcontroller extends GetxController {
 
   ///
 
+// Future<void> fetchMedicalSearch() async {
+//     try {
+//       isLoading.value = true; // Start loading
+//       // "IsCrossRequest": true,
+//       var body = {
+//         "Token": "",
+//         "Prokey": "",
+//         "Tags": [
+//           {"T": "Act", "V": "ANY"},
+//           {"T": "src", "V": "WEB"},
+//           {"T": "Obj", "V": "CONTENTS"},
+//           {"T": "c10", "V": "5"}
+//         ]
+//       };
+
+//       // Call the API and get the response
+//       var response = await DioHandler.readMedical(body: body);
+
+//       // Check if the response is valid
+//       if (response['Status'] == 1) {
+//         var data = response['DTable'];
+//         log("Response data: $data");
+
+//         // Validate and update medicalSearch
+//         if (data != null && data.isNotEmpty) {
+//           medicalSearch
+//               .assignAll(List<Map<String, dynamic>>.from(data[0] ?? []));
+//           filteredMedicalSearch.assignAll(medicalSearch);
+
+//           // Log IDs for debugging
+//           for (var item in medicalSearch) {
+//             log("Item ID: ${item['id']}");
+//           }
+//         } else {
+//           Get.snackbar('Error', 'Data is empty');
+//         }
+//       } else {
+//         Get.snackbar('Error', response['ErrorMsg'] ?? 'Unknown error');
+//       }
+//     } catch (e, stackTrace) {
+//       log('Exception: ${e.toString()}', stackTrace: stackTrace);
+//       Get.snackbar('Error', 'An unexpected error occurred');
+//     } finally {
+//       isLoading.value = false; // Stop loading
+// }}
+
   Future<void> fetchMedicalSearch() async {
     try {
-      isLoading.value = true; // Start loading
-      // "IsCrossRequest": true,
+      isLoading.value = true; // Start loading indicator
+
       var body = {
         "Token": "",
         "Prokey": "",
         "Tags": [
           {"T": "Act", "V": "ANY"},
+          {"T": "src", "V": "WEB"},
           {"T": "Obj", "V": "CONTENTS"},
           {"T": "c10", "V": "5"}
         ]
       };
 
-      // Call the API and get the response
-      var response = await DioHandler.readMedical(body: body);
+      int attempt = 0; // Count of retry attempts
+      int maxRetries = 10; // Optional: Maximum retries to avoid infinite loop
+      bool success = false;
 
-      // Check if the response is valid
-      if (response['Status'] == 1) {
-        var data = response['DTable'];
-        log("Response data: $data");
+      while (!success) {
+        attempt++; // Increment attempt count
+        log("Attempt $attempt: Sending request to fetchMedicalSearch");
+        var response = await DioHandler.readMedical(body: body);
 
-        // Validate and update `medicalSearch`
-        if (data != null && data.isNotEmpty) {
-          medicalSearch
-              .assignAll(List<Map<String, dynamic>>.from(data[0] ?? []));
-          filteredMedicalSearch.assignAll(medicalSearch);
+        if (response['Status'] == 1) {
+          // Success case: Assign data and exit the loop
+          var data = response['DTable'];
+          log("Response data: $data");
 
-          // Log IDs for debugging
-          for (var item in medicalSearch) {
-            log("Item ID: ${item['id']}");
+          if (data != null && data.isNotEmpty) {
+            medicalSearch
+                .assignAll(List<Map<String, dynamic>>.from(data[0] ?? []));
+            filteredMedicalSearch.assignAll(medicalSearch);
+            log("Data successfully fetched and assigned.");
+            log("medial search:$medicalSearch");
+          } else {
+            isError.value = true;
+            Get.snackbar('Error', 'Data is empty');
           }
+          success = true; // Exit loop
         } else {
-          Get.snackbar('Error', 'Data is empty');
+          isError.value = true;
+          isLoading.value = false;
+          // Log failure details
+          log("Attempt $attempt failed. Status: ${response['Status']}, Error: ${response['ErrorMsg'] ?? 'Unknown error'}");
+
+          // Optional: Stop retrying after maxRetries
+          if (attempt >= maxRetries) {
+            Get.snackbar('Error', 'Failed after $maxRetries attempts');
+            break;
+          }
+
+          // Exponential backoff before retrying
+          await Future.delayed(Duration(seconds: attempt * 2));
         }
-      } else {
-        Get.snackbar('Error', response['ErrorMsg'] ?? 'Unknown error');
       }
     } catch (e, stackTrace) {
+      isLoading.value = false;
+
+      // Handle unexpected errors
       log('Exception: ${e.toString()}', stackTrace: stackTrace);
       Get.snackbar('Error', 'An unexpected error occurred');
     } finally {
-      isLoading.value = false; // Stop loading
+      isLoading.value = false; // Stop loading indicator
     }
   }
 
@@ -113,6 +181,7 @@ class Appcontroller extends GetxController {
         "Prokey": "",
         "Tags": [
           {"T": "Act", "V": "ANY"},
+          {"T": "src", "V": "WEB"},
           {"T": "Obj", "V": "CONTENTS"},
           {"T": "c1", "V": formattedIds},
           {"T": "c10", "V": "9"}
@@ -228,6 +297,7 @@ class Appcontroller extends GetxController {
         "Prokey": "pNEvkmX3nJ7pWt7hADgrxKyCu5zjLdD+7NFtSZ8LeJ8=",
         "Tags": [
           {"T": "Act", "V": "ANY"},
+          {"T": "src", "V": "WEB"},
           {"T": "Obj", "V": "CONTENTS"},
           {"T": "c1", "V": medicalSearchDetailsid},
           {"T": "c2", "V": phoneNumbersExtracted},

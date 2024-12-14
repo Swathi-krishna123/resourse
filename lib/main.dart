@@ -10,10 +10,9 @@ import 'package:resource_plus/view/signUp.dart';
 import 'package:resource_plus/view/splash2.dart';
 import 'package:resource_plus/view/splashScreen.dart';
 
-void main() {
-  WidgetsFlutterBinding();
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
-  
 }
 
 class MyApp extends StatelessWidget {
