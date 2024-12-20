@@ -33,28 +33,30 @@ class Splash2 extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            SvgPicture.asset('assets/svg/splashimg.svg'),
+            Center(child: SvgPicture.asset('assets/svg/splashimg.svg')),
             SizedBox(
               height: 35,
             ),
             // Spacer pushes the buttons to the bottom
             Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                    onTap: () {
-                      Get.offNamed('/Login');
-                    },
-                    child: Customwidgets()
-                        .customContainer(text: 'SIGN IN', width: MediaQuery.of(context).size.width * 0.42)),
-                GestureDetector(
-                    onTap: () {
-                      Get.offNamed('/Signup');
-                    },
-                    child: Customwidgets()
-                        .customContainer(text: 'SIGN UP', width: MediaQuery.of(context).size.width * 0.42)),
-              ],
+            Flexible(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        Get.offNamed('/Login');
+                      },
+                      child: Customwidgets()
+                          .customContainer(text: 'SIGN IN', width: MediaQuery.of(context).size.width * 0.42)),
+                  GestureDetector(
+                      onTap: () {
+                        Get.offNamed('/Signup');
+                      },
+                      child: Customwidgets()
+                          .customContainer(text: 'SIGN UP', width: MediaQuery.of(context).size.width * 0.42)),
+                ],
+              ),
             ),
             SizedBox(height: 20), // Add some padding at the bottom if needed
           ],

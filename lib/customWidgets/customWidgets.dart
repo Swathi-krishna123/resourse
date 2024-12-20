@@ -1,21 +1,83 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:resource_plus/constants/colors.dart';
+import 'package:resource_plus/controller/authController.dart';
+
+final Authcontroller authcontroller = Get.put(Authcontroller());
 
 class Customwidgets {
-  AppBar customAppbar() {
-    return AppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: Appcolors.backgroundColor,
-      shadowColor: Colors.transparent,
-      foregroundColor: Appcolors.backgroundColor,
-      surfaceTintColor: Appcolors.backgroundColor,
-      title: SvgPicture.asset(
-        'assets/svg/applogo.svg',
-        height: 25,
+  AppBar customAppbar(bool isvalue, BuildContext context) {
+  return AppBar(
+    automaticallyImplyLeading: false,
+    backgroundColor: Appcolors.backgroundColor,
+    shadowColor: Colors.transparent,
+    foregroundColor: Appcolors.backgroundColor,
+    surfaceTintColor: Appcolors.backgroundColor,
+    title: SvgPicture.asset(
+      'assets/svg/applogo.svg',
+      height: 25,
+    ),
+    actions: [
+      isvalue
+          ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: IconButton(
+                onPressed: () {
+                  _showPopupMenu(context); 
+                },
+                icon: Icon(Icons.menu, color: Appcolors.TextColor),
+              ),
+          )
+          : SizedBox(),
+    ],
+  );
+}
+
+void _showPopupMenu(BuildContext context) async {
+  final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+  await showMenu(
+    color: Colors.white,
+    context: context,
+    position: RelativeRect.fromLTRB(
+        overlay.size.width - 100, 60, 0, 0), 
+    items: [
+      // PopupMenuItem<String>(
+      //   value: 'Profile',
+      //   child: Row(
+      //     children: [
+      //       Icon(Icons.person, color:Appcolors.themeColor),
+      //       SizedBox(width: 10),
+      //       Text('Profile'),
+      //     ],
+      //   ),
+      // ),
+      // PopupMenuItem<String>(
+      //   value: 'Change Password',
+      //   child: Row(
+      //     children: [
+      //       Icon(Icons.lock, color: Appcolors.themeColor),
+      //       SizedBox(width: 10),
+      //       Text('Change Password'),
+      //     ],
+      //   ),
+      // ),
+      PopupMenuItem<String>(
+        value: 'Logout',
+        onTap: () => authcontroller.logout(),
+        child: Row(
+          children: [
+            Icon(Icons.logout, color:Appcolors.themeColor),
+            SizedBox(width: 10),
+            Text('Logout'),
+          ],
+        ),
       ),
-    );
-  }
+    ],
+    
+  );
+}
+
 
   Widget textFormField({
     TextEditingController? controller,
@@ -26,7 +88,7 @@ class Customwidgets {
     void Function()? onFocusChange,
     Widget? prefixIcon,
     Widget? suffixIcon,
-    bool obsecureText=false ,
+    bool obscureText = false,
   }) {
     return Stack(
       alignment: Alignment.centerLeft,
@@ -35,7 +97,7 @@ class Customwidgets {
         TextFormField(
           cursorColor: Appcolors.themeColor,
           controller: controller,
-          obscureText: obsecureText,
+          obscureText: obscureText,
           validator: validator,
           focusNode: focusNode,
           onFieldSubmitted: (value) => onFocusChange,
@@ -189,35 +251,3 @@ class Customwidgets {
 
 
 
-// title: Text.rich(
-      //   TextSpan(
-      //     children: [
-      //       TextSpan(
-      //         text: 'Re.',
-      //         style: TextStyle(
-      //             color: Appcolors.themeColor,
-      //             fontWeight: FontWeight.w700,
-      //             fontSize: 30.69), // Normal text
-      //       ),
-      //       TextSpan(
-      //         text: 'source',
-      //         style: TextStyle(
-      //             color: Appcolors.blackColor,
-      //             fontWeight: FontWeight.w700,
-      //             fontSize: 30.69), // Normal text
-      //       ),
-      //       WidgetSpan(
-      //         child: Transform.translate(
-      //           offset: const Offset(0, -5), // Adjust the vertical position
-      //           child: Text(
-      //             '+', // Superscript text
-      //             style: TextStyle(
-      //                 color: Appcolors.themeColor,
-      //                 fontWeight: FontWeight.w700,
-      //                 fontSize: 30.69), // Smaller font size
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),

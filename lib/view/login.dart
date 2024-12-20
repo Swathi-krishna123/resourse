@@ -9,12 +9,18 @@ import 'package:resource_plus/customWidgets/customWidgets.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   final Authcontroller authcontroller = Get.put(Authcontroller());
   final _formkey = GlobalKey<FormState>();
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
   RxBool isLoading = false.obs;
+  RxBool ispasswordvisible = false.obs;
+  void toggleVisible() {
+    ispasswordvisible.value = !ispasswordvisible.value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +54,7 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 Customwidgets().textFormField(
-                    controller: authcontroller.emailController,
+                    controller: emailController,
                     focusNode: emailFocusNode,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -73,61 +79,76 @@ class Login extends StatelessWidget {
                 SizedBox(
                   height: 15,
                 ),
-                Customwidgets().textFormField(
-                  controller: authcontroller.passwordController,
-                  focusNode: passwordFocusNode,
-                  hintText: 'Enter your password',
-                  labelText: 'Password',
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'required field';
-                    }
-                    return null;
-                  },
-                  obsecureText: true,
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: SvgPicture.asset('assets/svg/passwordlock.svg'),
-                  ),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: SvgPicture.asset(
-                      'assets/svg/eyeclose.svg',
+                Obx(
+                  () => Customwidgets().textFormField(
+                    controller: passwordController,
+                    focusNode: passwordFocusNode,
+                    hintText: 'Enter your password',
+                    labelText: 'Password',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'required field';
+                      }
+                      return null;
+                    },
+                    obscureText: !ispasswordvisible.value,
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: SvgPicture.asset('assets/svg/passwordlock.svg'),
                     ),
+                    suffixIcon: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: IconButton(
+                            onPressed: () {
+                              toggleVisible();
+                            },
+                            icon: !ispasswordvisible.value
+                                ? Icon(
+                                    Icons.visibility_off,
+                                    color: Appcolors.hintColor,
+                                  )
+                                : Icon(
+                                    Icons.visibility,
+                                    color: Appcolors.hintColor,
+                                  ))),
                   ),
                 ),
                 SizedBox(
                   height: 5,
                 ),
-                Row(
-                  children: [
-                    Spacer(),
-                    Text(
-                      'Forgot Password?',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                          color: Appcolors.text2Color),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Spacer(),
+                //     Text(
+                //       'Forgot Password?',
+                //       style: TextStyle(
+                //           fontWeight: FontWeight.w500,
+                //           fontSize: 14,
+                //           color: Appcolors.text2Color),
+                //     ),
+                //   ],
+                // ),
                 SizedBox(
                   height: 20,
                 ),
                 Obx(
                   () => GestureDetector(
                     onTap: isLoading.value
-                        ? null // Disable tap when loading
+                        ? null
                         : () async {
                             if (_formkey.currentState!.validate()) {
-                              isLoading.value = true; // Start loading
+                              isLoading.value = true;
                               try {
-                                await authcontroller
-                                    .login(); // Your async login function
+                                await authcontroller.login(
+                                    emailController.text.trim(),
+                                    passwordController.text.trim());
+                                log("your email is ${emailController.text}");
+                                log("your password is ${passwordController.text}");
+                                // Get.offNamed('/OtpScreen', arguments: {"email": emailController.text.trim()});
                               } catch (e) {
                                 log("Login Error: $e");
                               } finally {
-                                isLoading.value = false; // Stop loading
+                                isLoading.value = false;
                               }
                             }
                           },

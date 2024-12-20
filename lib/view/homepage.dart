@@ -11,15 +11,15 @@ class Homepage extends StatelessWidget {
   Homepage({super.key});
 
   final Appcontroller appController = Get.put(Appcontroller());
+
   ScrollController scrollController = ScrollController();
 
   FocusNode searchFocusNode = FocusNode();
   var searchboxEnable = false.obs;
 
-  // Filter search results based on query
   void _filterSearchResults(String query) {
     if (query.isEmpty) {
-      appController.filteredMedicalSearch.clear(); // Ensure list is empty
+      appController.filteredMedicalSearch.clear();
     } else {
       appController.filteredMedicalSearch.assignAll(
         appController.medicalSearch.where((item) {
@@ -35,7 +35,7 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: Customwidgets().customAppbar(),
+      appBar: Customwidgets().customAppbar(true, context),
       body: Column(
         children: [
           Padding(
@@ -44,7 +44,6 @@ class Homepage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Search TextField
                 SizedBox(
                   height: 50,
                   child: TextFormField(
@@ -130,8 +129,7 @@ class Homepage extends StatelessWidget {
                                     width: 113,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 5),
-                                    margin: const EdgeInsets.only(
-                                        right: 10), // Add margin between items
+                                    margin: const EdgeInsets.only(right: 10),
                                     decoration: BoxDecoration(
                                       color: const Color(0xffD6C2FF)
                                           .withOpacity(0.14),
@@ -169,12 +167,9 @@ class Homepage extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () {
                                       Get.to(() => ShareResources());
-                                      appController.onClose();
                                     },
                                     child: Container(
                                       height: 42,
-
-                                      // Add margin between items
                                       decoration: BoxDecoration(
                                         color: Appcolors.themeColor
                                             .withOpacity(0.14),
@@ -218,25 +213,20 @@ class Homepage extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
-
-                // Selected Items Display
                 Obx(() {
                   if (appController.selectedItems.isEmpty) {
-                    return const SizedBox
-                        .shrink(); // No display if no items selected
+                    return const SizedBox.shrink();
                   }
                   return SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    physics:
-                        const BouncingScrollPhysics(), // Scroll horizontally
+                    physics: const BouncingScrollPhysics(),
                     child: Row(
                       children: appController.selectedItems.map((item) {
                         final name = item['nm'] ?? 'Unknown Name';
                         return Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
-                          margin: const EdgeInsets.only(
-                              right: 10), // Add margin between items
+                          margin: const EdgeInsets.only(right: 10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
@@ -259,7 +249,6 @@ class Homepage extends StatelessWidget {
                               const SizedBox(width: 5),
                               GestureDetector(
                                   onTap: () {
-                                    // Remove the item when delete icon is clicked
                                     appController
                                         .removeMedicalSearchDetails(item);
                                   },
@@ -275,81 +264,23 @@ class Homepage extends StatelessWidget {
               ],
             ),
           ),
-
-          // List or Placeholder
           Expanded(
             child: Obx(() {
-              // if (appController.filteredMedicalSearch.isEmpty) {
-              //   // Placeholder shown when no search results
-              //   return Center(
-              //     child: SingleChildScrollView(
-              //       physics: const BouncingScrollPhysics(),
-              //       child: Column(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           Stack(
-              //             children: [
-              //               Align(
-              //                 alignment: Alignment.center,
-              //                 child: SvgPicture.asset(
-              //                   'assets/svg/backgroundimg.svg',
-              //                   height:
-              //                       MediaQuery.of(context).size.height * 0.25,
-              //                 ),
-              //               ),
-              //               Align(
-              //                 alignment: Alignment.center,
-              //                 child: SvgPicture.asset(
-              //                   'assets/svg/bgobjects.svg',
-              //                   height:
-              //                       MediaQuery.of(context).size.height * 0.2,
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //           const SizedBox(height: 20),
-              //           Text(
-              //             'Search by keyword or select\ntopics from the list below',
-              //             textAlign: TextAlign.center,
-              //             style: TextStyle(
-              //               color: Appcolors.hintColor,
-              //               fontWeight: FontWeight.w400,
-              //               fontSize: 20,
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   );
-              // }
-
-              // if (appController.isLoading.value) {
-              //   // Show CircularProgressIndicator when loading
-              //   return Center(
-              //     child: CircularProgressIndicator(
-              //       color: Appcolors.themeColor, // Adjust the color as needed
-              //       strokeWidth: 4.0,
-              //     ),
-              //   );
-              // }
-
               if (appController.isLoading.value) {
-                // Show CircularProgressIndicator when data is loading
                 return Center(
                   child: CircularProgressIndicator(
-                    color: Appcolors.themeColor, // Customizable color
-                    strokeWidth: 4.0, // Adjust thickness if needed
+                    color: Appcolors.themeColor,
+                    strokeWidth: 4.0,
                   ),
                 );
-              } else if (appController.filteredMedicalSearch.isEmpty || appController.isError.value) {
-                // Show placeholder when no data is available
+              } else if (appController.filteredMedicalSearch.isEmpty ||
+                  appController.isError.value) {
                 return Center(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Your SVG assets and placeholder content
                         Stack(
                           children: [
                             Align(
@@ -385,7 +316,6 @@ class Homepage extends StatelessWidget {
                   ),
                 );
               } else {
-                // Show filtered search results
                 return appController.medicalSearchDetails.isNotEmpty &&
                         searchboxEnable == false
                     ? ListView.builder(
@@ -467,7 +397,6 @@ class Homepage extends StatelessWidget {
                               final name = item['nm'] ?? 'Unknown Name';
 
                               return Obx(() {
-                                // Check if the current item is selected
                                 final isSelected =
                                     appController.selectedItems.any(
                                   (selectedItem) =>
@@ -485,20 +414,16 @@ class Homepage extends StatelessWidget {
                                   activeColor: Appcolors.themeColor,
                                   onChanged: (bool? value) {
                                     if (value == true) {
-                                      // Add the item if it is not already selected
                                       appController.selectedItems.add(item);
                                     } else {
-                                      // Remove the item if it is already selected
                                       appController.selectedItems.removeWhere(
                                         (selectedItem) =>
                                             selectedItem['id'] == item['id'],
                                       );
                                     }
 
-                                    // Log the current selection for debugging
                                     log("Selected items: ${appController.selectedItems.map((e) => e['id'])}");
 
-                                    // Notify the UI of changes
                                     appController.selectedItems.refresh();
                                   },
                                 );
@@ -510,8 +435,6 @@ class Homepage extends StatelessWidget {
               }
             }),
           ),
-
-          // Conditional Button at the Bottom
           Obx(() {
             return appController.medicalSearchDetails.isNotEmpty &&
                     searchboxEnable == false
@@ -527,7 +450,6 @@ class Homepage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10)),
                       child: GestureDetector(
                         onTap: () async {
-                          // Log selected items (already being shown in the box)
                           log("Proceed with selected items: ${appController.selectedItems}");
                           appController.fetchMedicalSearchDetails();
                           appController.searchController.clear();

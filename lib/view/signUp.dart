@@ -9,6 +9,13 @@ import 'package:resource_plus/customWidgets/customWidgets.dart';
 
 class Signup extends StatelessWidget {
   Signup({super.key});
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController lastnameController = TextEditingController();
+  final TextEditingController fullnameController = TextEditingController();
+  final TextEditingController confirmpasswordContoller =
+      TextEditingController();
 
   final Authcontroller authcontroller = Get.put(Authcontroller());
   final _formkey = GlobalKey<FormState>();
@@ -16,9 +23,18 @@ class Signup extends StatelessWidget {
   FocusNode passwordFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
   FocusNode lastnameFocusNode = FocusNode();
-  FocusNode firstnameFocusNode = FocusNode();
+  FocusNode fullnameFocusNode = FocusNode();
   FocusNode confirmpasswordFocusNode = FocusNode();
   RxBool isLoading = false.obs;
+  RxBool ispasswordvisible = false.obs;
+  RxBool isConfirmpasswordvisible = false.obs;
+  void toggleVisible() {
+    ispasswordvisible.value = !ispasswordvisible.value;
+  }
+
+  void toggleConfirmVisible() {
+    isConfirmpasswordvisible.value = !isConfirmpasswordvisible.value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +68,7 @@ class Signup extends StatelessWidget {
                   ),
                 ),
                 Customwidgets().textFormField(
-                    controller: authcontroller.emailController,
+                    controller: emailController,
                     focusNode: emailFocusNode,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -78,113 +94,133 @@ class Signup extends StatelessWidget {
                   height: 15,
                 ),
                 Customwidgets().textFormField(
-                    controller: authcontroller.phoneController,
+                    controller: phoneController,
                     focusNode: phoneFocusNode,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'required field';
+                        return "Phone number is required";
                       }
-                      return null;
+
+                      // Ensure the value starts with a country code (1–4 digits)
+                      if (!RegExp(r'^\d{1,4}\d{7,15}$').hasMatch(value)) {
+                        return "Enter a valid phone number with country code";
+                      }
+
+                      // Check if the country code is valid (optional)
+                      final validCountryCodes = [
+                        "1", "91", "44", "86",
+                        "20", // Add more as needed
+                      ];
+                      String countryCode = value.substring(
+                          0,
+                          value.length -
+                              10); // Assuming last 10 digits are phone number
+                      if (!validCountryCodes.contains(countryCode)) {
+                        return "Invalid country code";
+                      }
+
+                      return null; // Valid input
                     },
                     hintText: 'Enter your phone number',
                     labelText: 'Phone',
-                    onFocusChange: () => lastnameFocusNode,
+                    onFocusChange: () => fullnameFocusNode,
                     prefixIcon: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: SvgPicture.asset("assets/svg/phone.svg")
-                    )),
+                        padding: const EdgeInsets.all(14),
+                        child: SvgPicture.asset("assets/svg/phone.svg"))),
                 SizedBox(
                   height: 15,
                 ),
                 Customwidgets().textFormField(
-                    controller: authcontroller.lastnameController,
-                    focusNode: lastnameFocusNode,
+                    controller: fullnameController,
+                    focusNode: fullnameFocusNode,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'required field';
                       }
                       return null;
                     },
-                    hintText: 'Enter your Last Name',
-                    labelText: 'Last Name',
-                    onFocusChange: () => firstnameFocusNode,
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child:  SvgPicture.asset("assets/svg/user.svg")
-                    )),
-                SizedBox(
-                  height: 15,
-                ),
-                Customwidgets().textFormField(
-                    controller: authcontroller.firstnameController,
-                    focusNode: firstnameFocusNode,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'required field';
-                      }
-                      return null;
-                    },
-                    hintText: 'Enter your First Name',
-                    labelText: 'First Name',
+                    hintText: 'Enter your Full Name',
+                    labelText: 'Full Name',
                     onFocusChange: () => passwordFocusNode,
                     prefixIcon: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: SvgPicture.asset("assets/svg/user.svg"))),
+                SizedBox(
+                  height: 15,
+                ),
+                Obx(
+                  () => Customwidgets().textFormField(
+                    controller: passwordController,
+                    focusNode: passwordFocusNode,
+                    onFocusChange: () => confirmpasswordFocusNode,
+                    hintText: 'Enter your password',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'required field';
+                      }
+                      return null;
+                    },
+                    labelText: 'Password',
+                    obscureText: !ispasswordvisible.value,
+                    prefixIcon: Padding(
                       padding: const EdgeInsets.all(14),
-                      child: SvgPicture.asset("assets/svg/user.svg")
-                    )),
-                SizedBox(
-                  height: 15,
-                ),
-                Customwidgets().textFormField(
-                  controller: authcontroller.signuppasswordController,
-                  focusNode: passwordFocusNode,
-                  onFocusChange: () => confirmpasswordFocusNode,
-                  hintText: 'Enter your password',
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'required field';
-                    }
-                    return null;
-                  },
-                  labelText: 'Password',
-                  obsecureText: true,
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: SvgPicture.asset('assets/svg/passwordlock.svg'),
-                  ),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: SvgPicture.asset(
-                      'assets/svg/eyeclose.svg',
+                      child: SvgPicture.asset('assets/svg/passwordlock.svg'),
                     ),
+                    suffixIcon: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: IconButton(
+                            onPressed: () {
+                              toggleVisible();
+                            },
+                            icon: !ispasswordvisible.value
+                                ? Icon(
+                                    Icons.visibility_off,
+                                    color: Appcolors.hintColor,
+                                  )
+                                : Icon(
+                                    Icons.visibility,
+                                    color: Appcolors.hintColor,
+                                  ))),
                   ),
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                Customwidgets().textFormField(
-                  controller: authcontroller.confirmpasswordContoller,
-                  focusNode: confirmpasswordFocusNode,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'required field';
-                    } else if (authcontroller.confirmpasswordContoller.text !=
-                        authcontroller.signuppasswordController.text) {
-                      return "password do not math";
-                    }
-                    return null;
-                  },
-                  hintText: 'Confirm your password',
-                  labelText: 'Confirm Password',
-                  obsecureText: true,
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: SvgPicture.asset('assets/svg/passwordlock.svg'),
-                  ),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: SvgPicture.asset(
-                      'assets/svg/eyeclose.svg',
+                Obx(
+                  () => Customwidgets().textFormField(
+                    controller: confirmpasswordContoller,
+                    focusNode: confirmpasswordFocusNode,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'required field';
+                      } else if (confirmpasswordContoller.text !=
+                          passwordController.text) {
+                        return "password do not math";
+                      }
+                      return null;
+                    },
+                    hintText: 'Confirm your password',
+                    labelText: 'Confirm Password',
+                    obscureText: !isConfirmpasswordvisible.value,
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: SvgPicture.asset('assets/svg/passwordlock.svg'),
                     ),
+                    suffixIcon: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: IconButton(
+                            onPressed: () {
+                              toggleVisible();
+                            },
+                            icon: !isConfirmpasswordvisible.value
+                                ? Icon(
+                                    Icons.visibility_off,
+                                    color: Appcolors.hintColor,
+                                  )
+                                : Icon(
+                                    Icons.visibility,
+                                    color: Appcolors.hintColor,
+                                  ))),
                   ),
                 ),
                 SizedBox(
@@ -193,17 +229,21 @@ class Signup extends StatelessWidget {
                 Obx(
                   () => GestureDetector(
                     onTap: isLoading.value
-                        ? null // Disable tap when loading
+                        ? null
                         : () async {
                             if (_formkey.currentState!.validate()) {
-                              isLoading.value = true; // Start loading
+                              isLoading.value = true;
                               try {
-                                await authcontroller
-                                    .signUp(); // Your async signup function
+                                await authcontroller.signUp(
+                                    emailController.text.trim(),
+                                    passwordController.text.trim(),
+                                    fullnameController.text.trim(),
+                                    phoneController.text.trim());
+                                // Get.offNamed('/OtpScreen', arguments: {"email": emailController.text.trim()});
                               } catch (e) {
                                 log("SignUp Error: $e");
                               } finally {
-                                isLoading.value = false; // Stop loading
+                                isLoading.value = false;
                               }
                             }
                           },
