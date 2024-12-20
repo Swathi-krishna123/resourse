@@ -35,7 +35,10 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: Customwidgets().customAppbar(true, context,false),
+      appBar: Customwidgets().customAppbar(
+        true,
+        context,
+      ),
       body: Column(
         children: [
           Padding(

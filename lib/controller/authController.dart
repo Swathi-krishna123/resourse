@@ -148,15 +148,29 @@ class Authcontroller extends GetxController {
   }
 
   Future<void> logout() async {
-    try {
-      await sharedPrefHelper.removeToken();
+  try {
+    // Remove user token or session data
+    await sharedPrefHelper.removeToken();
 
-      Get.offNamed('/Splash2');
+    // Navigate to the Splash2 screen and clear navigation history
+    Get.offAllNamed('/Splash2');
 
-      Get.snackbar('Success', 'Logged out successfully');
-    } catch (e) {
-      log('Error during logout: $e');
-      Get.snackbar('Error', 'Failed to logout. Please try again.');
-    }
+    // Show a success message to the user
+    Get.snackbar(
+      'Success', 
+      'Logged out successfully',
+      snackPosition: SnackPosition.TOP, 
+    );
+  } catch (e) {
+    // Log the error for debugging
+    log('Error during logout: $e');
+
+    // Show an error message to the user
+    Get.snackbar(
+      'Error', 
+      'Failed to logout. Please try again.',
+      snackPosition: SnackPosition.BOTTOM, 
+    );
   }
+}
 }

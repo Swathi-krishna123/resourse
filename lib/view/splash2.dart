@@ -10,7 +10,9 @@ class Splash2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false,),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -34,21 +36,19 @@ class Splash2 extends StatelessWidget {
               height: 30,
             ),
             Center(child: SvgPicture.asset('assets/svg/splashimg.svg')),
-            SizedBox(
-              height: 35,
-            ),
             Spacer(),
-            Flexible(
+            Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                      onTap: () {
-                        Get.offNamed('/Login');
-                      },
-                      child: Customwidgets().customContainer(
-                          text: 'SIGN IN',
-                          width: MediaQuery.of(context).size.width * 0.42)),
+                    onTap: () {
+                      Get.offNamed('/Login');
+                    },
+                    child: Customwidgets().customContainer(
+                        text: 'SIGN IN',
+                        width: MediaQuery.of(context).size.width * 0.42),
+                  ),
                   GestureDetector(
                       onTap: () {
                         Get.offNamed('/Signup');
@@ -59,7 +59,6 @@ class Splash2 extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
           ],
         ),
       ),

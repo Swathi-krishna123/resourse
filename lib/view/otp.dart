@@ -19,7 +19,7 @@ class OtpScreen extends StatelessWidget {
     final String message = Get.arguments?['message'] ?? '';
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: Customwidgets().customAppbar(false, context,false),
+      appBar: Customwidgets().customAppbar(false, context,),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(

@@ -10,18 +10,16 @@ class Customwidgets {
   AppBar customAppbar(
     bool isvalue,
     BuildContext context,
-    bool isleading,
+    
     
   ) {
     return AppBar(
-      automaticallyImplyLeading: isleading,
+      automaticallyImplyLeading: false,
       backgroundColor: Appcolors.backgroundColor,
       shadowColor: Colors.transparent,
       foregroundColor: Appcolors.backgroundColor,
       surfaceTintColor: Appcolors.backgroundColor,
-      leading: isleading == true
-          ? IconButton(onPressed: () { Get.toNamed('/');}, icon: Icon(Icons.arrow_back_rounded,color: Appcolors.blackColor,))
-          : null,
+      
       title: SvgPicture.asset(
         'assets/svg/applogo.svg',
         height: 25,
@@ -236,7 +234,7 @@ class Customwidgets {
     double? width,
   }) {
     return Container(
-      height: 53,
+      height: 52,
       width: width,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),

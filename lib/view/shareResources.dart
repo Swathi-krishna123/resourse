@@ -17,7 +17,7 @@ class ShareResources extends StatelessWidget {
     Appcontroller appcontroller = Get.put(Appcontroller());
 
     return Scaffold(
-      appBar: Customwidgets().customAppbar(false, context, true),
+      appBar: Customwidgets().customAppbar(false, context, ),
       // bottomNavigationBar: BottomAppBar(child: Center(child: Text('data'),),),
       body: Padding(
         padding:
