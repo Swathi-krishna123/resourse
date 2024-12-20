@@ -94,7 +94,7 @@ class ShareResources extends StatelessWidget {
 
                 // Primary Phone Field
                 Customwidgets().contentsharefields(
-                  hintText: '  (000) 000-0000',
+                  hintText: '(000) 000-0000',
                   labelText: 'Phone 1',
                   controller: controller.phone1Controller,
                   focusNode: controller.phone1FocusNode,
@@ -110,7 +110,7 @@ class ShareResources extends StatelessWidget {
 
                     // Check if the country code is valid (optional)
                     final validCountryCodes = [
-                      "1", "91 ", "44", "86",
+                      "1", "91", "44", "86",
                       "20", // Add more as needed
                     ];
                     String countryCode = value.substring(
@@ -137,7 +137,7 @@ class ShareResources extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Customwidgets().contentsharefields(
-                                hintText: '  (000) 000-0000',
+                                hintText: '(000) 000-0000',
                                 labelText: 'Phone ${index + 2}',
                                 controller: controller
                                     .additionalPhoneControllers[index],
