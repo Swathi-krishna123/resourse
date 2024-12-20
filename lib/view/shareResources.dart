@@ -17,7 +17,7 @@ class ShareResources extends StatelessWidget {
     Appcontroller appcontroller = Get.put(Appcontroller());
 
     return Scaffold(
-      appBar: Customwidgets().customAppbar(false,context),
+      appBar: Customwidgets().customAppbar(false, context, true),
       // bottomNavigationBar: BottomAppBar(child: Center(child: Text('data'),),),
       body: Padding(
         padding:
@@ -58,7 +58,8 @@ class ShareResources extends StatelessWidget {
                       },
                       child: Container(
                         height: 35,
-                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
                           color: Appcolors.themeColor.withOpacity(0.14),
                           borderRadius: BorderRadius.circular(10),
@@ -206,7 +207,7 @@ class ShareResources extends StatelessWidget {
                 //   ),
                 // ),
                 const SizedBox(
-                  height: 15,
+                  height: 5,
                 ),
 
                 // Email Field

@@ -7,77 +7,83 @@ import 'package:resource_plus/controller/authController.dart';
 final Authcontroller authcontroller = Get.put(Authcontroller());
 
 class Customwidgets {
-  AppBar customAppbar(bool isvalue, BuildContext context) {
-  return AppBar(
-    automaticallyImplyLeading: false,
-    backgroundColor: Appcolors.backgroundColor,
-    shadowColor: Colors.transparent,
-    foregroundColor: Appcolors.backgroundColor,
-    surfaceTintColor: Appcolors.backgroundColor,
-    title: SvgPicture.asset(
-      'assets/svg/applogo.svg',
-      height: 25,
-    ),
-    actions: [
-      isvalue
-          ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: IconButton(
-                onPressed: () {
-                  _showPopupMenu(context); 
-                },
-                icon: Icon(Icons.menu, color: Appcolors.TextColor),
-              ),
-          )
-          : SizedBox(),
-    ],
-  );
-}
-
-void _showPopupMenu(BuildContext context) async {
-  final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
-  await showMenu(
-    color: Colors.white,
-    context: context,
-    position: RelativeRect.fromLTRB(
-        overlay.size.width - 100, 60, 0, 0), 
-    items: [
-      // PopupMenuItem<String>(
-      //   value: 'Profile',
-      //   child: Row(
-      //     children: [
-      //       Icon(Icons.person, color:Appcolors.themeColor),
-      //       SizedBox(width: 10),
-      //       Text('Profile'),
-      //     ],
-      //   ),
-      // ),
-      // PopupMenuItem<String>(
-      //   value: 'Change Password',
-      //   child: Row(
-      //     children: [
-      //       Icon(Icons.lock, color: Appcolors.themeColor),
-      //       SizedBox(width: 10),
-      //       Text('Change Password'),
-      //     ],
-      //   ),
-      // ),
-      PopupMenuItem<String>(
-        value: 'Logout',
-        onTap: () => authcontroller.logout(),
-        child: Row(
-          children: [
-            Icon(Icons.logout, color:Appcolors.themeColor),
-            SizedBox(width: 10),
-            Text('Logout'),
-          ],
-        ),
-      ),
-    ],
+  AppBar customAppbar(
+    bool isvalue,
+    BuildContext context,
+    bool isleading,
     
-  );
-}
+  ) {
+    return AppBar(
+      automaticallyImplyLeading: isleading,
+      backgroundColor: Appcolors.backgroundColor,
+      shadowColor: Colors.transparent,
+      foregroundColor: Appcolors.backgroundColor,
+      surfaceTintColor: Appcolors.backgroundColor,
+      leading: isleading == true
+          ? IconButton(onPressed: () { Get.toNamed('/');}, icon: Icon(Icons.arrow_back_rounded,color: Appcolors.blackColor,))
+          : null,
+      title: SvgPicture.asset(
+        'assets/svg/applogo.svg',
+        height: 25,
+      ),
+      actions: [
+        isvalue
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: IconButton(
+                  onPressed: () {
+                    _showPopupMenu(context);
+                  },
+                  icon: Icon(Icons.menu, color: Appcolors.TextColor),
+                ),
+              )
+            : SizedBox(),
+      ],
+    );
+  }
 
+  void _showPopupMenu(BuildContext context) async {
+    final RenderBox overlay =
+        Overlay.of(context)!.context.findRenderObject() as RenderBox;
+    await showMenu(
+      color: Colors.white,
+      context: context,
+      position: RelativeRect.fromLTRB(overlay.size.width - 100, 60, 0, 0),
+      items: [
+        // PopupMenuItem<String>(
+        //   value: 'Profile',
+        //   child: Row(
+        //     children: [
+        //       Icon(Icons.person, color:Appcolors.themeColor),
+        //       SizedBox(width: 10),
+        //       Text('Profile'),
+        //     ],
+        //   ),
+        // ),
+        // PopupMenuItem<String>(
+        //   value: 'Change Password',
+        //   child: Row(
+        //     children: [
+        //       Icon(Icons.lock, color: Appcolors.themeColor),
+        //       SizedBox(width: 10),
+        //       Text('Change Password'),
+        //     ],
+        //   ),
+        // ),
+        PopupMenuItem<String>(
+          value: 'Logout',
+          onTap: () => authcontroller.logout(),
+          child: Row(
+            children: [
+              Icon(Icons.logout, color: Appcolors.themeColor),
+              SizedBox(width: 10),
+              Text('Logout'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget textFormField({
     TextEditingController? controller,
@@ -230,7 +236,7 @@ void _showPopupMenu(BuildContext context) async {
     double? width,
   }) {
     return Container(
-      height: 51,
+      height: 53,
       width: width,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -247,7 +253,3 @@ void _showPopupMenu(BuildContext context) async {
     );
   }
 }
-
-
-
-

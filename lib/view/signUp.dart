@@ -210,7 +210,7 @@ class Signup extends StatelessWidget {
                         padding: const EdgeInsets.all(14),
                         child: IconButton(
                             onPressed: () {
-                              toggleVisible();
+                              toggleConfirmVisible();
                             },
                             icon: !isConfirmpasswordvisible.value
                                 ? Icon(

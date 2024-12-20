@@ -10,7 +10,7 @@ class Splash2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(automaticallyImplyLeading: false,),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
