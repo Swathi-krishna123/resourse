@@ -168,11 +168,11 @@ class Signup extends StatelessWidget {
                     ),
                     suffixIcon: Padding(
                         padding: const EdgeInsets.all(14),
-                        child: IconButton(
-                            onPressed: () {
+                        child: GestureDetector(
+                            onTap: () {
                               toggleVisible();
                             },
-                            icon: !ispasswordvisible.value
+                            child: !ispasswordvisible.value
                                 ? Icon(
                                     Icons.visibility_off,
                                     color: Appcolors.hintColor,
@@ -208,11 +208,11 @@ class Signup extends StatelessWidget {
                     ),
                     suffixIcon: Padding(
                         padding: const EdgeInsets.all(14),
-                        child: IconButton(
-                            onPressed: () {
+                        child: GestureDetector(
+                            onTap: () {
                               toggleConfirmVisible();
                             },
-                            icon: !isConfirmpasswordvisible.value
+                            child: !isConfirmpasswordvisible.value
                                 ? Icon(
                                     Icons.visibility_off,
                                     color: Appcolors.hintColor,

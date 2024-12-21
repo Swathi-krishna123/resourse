@@ -98,11 +98,11 @@ class Login extends StatelessWidget {
                     ),
                     suffixIcon: Padding(
                         padding: const EdgeInsets.all(14),
-                        child: IconButton(
-                            onPressed: () {
+                        child: GestureDetector(
+                            onTap: () {
                               toggleVisible();
                             },
-                            icon: !ispasswordvisible.value
+                            child: !ispasswordvisible.value
                                 ? Icon(
                                     Icons.visibility_off,
                                     color: Appcolors.hintColor,
@@ -142,8 +142,7 @@ class Login extends StatelessWidget {
                                 await authcontroller.login(
                                     emailController.text.trim(),
                                     passwordController.text.trim());
-                                log("your email is ${emailController.text}");
-                                log("your password is ${passwordController.text}");
+
                                 // Get.offNamed('/OtpScreen', arguments: {"email": emailController.text.trim()});
                               } catch (e) {
                                 log("Login Error: $e");
