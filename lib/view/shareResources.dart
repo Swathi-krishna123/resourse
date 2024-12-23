@@ -17,7 +17,10 @@ class ShareResources extends StatelessWidget {
     Appcontroller appcontroller = Get.put(Appcontroller());
 
     return Scaffold(
-      appBar: Customwidgets().customAppbar(false, context, ),
+      appBar: Customwidgets().customAppbar(
+        false,
+        context,
+      ),
       // bottomNavigationBar: BottomAppBar(child: Center(child: Text('data'),),),
       body: Padding(
         padding:
@@ -109,20 +112,20 @@ class ShareResources extends StatelessWidget {
                       return "Enter a valid phone number with country code";
                     }
 
-                    // Check if the country code is valid (optional)
-                    final validCountryCodes = [
-                      "1", "91", "44", "86",
-                      "20", // Add more as needed
-                    ];
-                    String countryCode = value.substring(
-                        0,
-                        value.length -
-                            10); // Assuming last 10 digits are phone number
-                    if (!validCountryCodes.contains(countryCode)) {
-                      return "Invalid country code";
-                    }
+                    // // Check if the country code is valid (optional)
+                    // final validCountryCodes = [
+                    //   "1", "91", "44", "86",
+                    //   "20",
+                    // ];
+                    // String countryCode = value.substring(
+                    //     0,
+                    //     value.length -
+                    //         10);
+                    // if (!validCountryCodes.contains(countryCode)) {
+                    //   return "Invalid country code";
+                    // }
 
-                    return null; // Valid input
+                    // return null;
                   },
                 ),
                 const SizedBox(height: 15),
@@ -155,21 +158,21 @@ class ShareResources extends StatelessWidget {
                                     return "Enter a valid phone number with country code";
                                   }
 
-                                  // Check if the country code is valid (optional)
-                                  final validCountryCodes = [
-                                    "1", "91", "44", "86",
-                                    "20", // Add more as needed
-                                  ];
-                                  String countryCode = value.substring(
-                                      0,
-                                      value.length -
-                                          10); // Assuming last 10 digits are phone number
-                                  if (!validCountryCodes
-                                      .contains(countryCode)) {
-                                    return "Invalid country code";
-                                  }
+                                  // // Check if the country code is valid (optional)
+                                  // final validCountryCodes = [
+                                  //   "1", "91", "44", "86",
+                                  //   "20", // Add more as needed
+                                  // ];
+                                  // String countryCode = value.substring(
+                                  //     0,
+                                  //     value.length -
+                                  //         10); // Assuming last 10 digits are phone number
+                                  // if (!validCountryCodes
+                                  //     .contains(countryCode)) {
+                                  //   return "Invalid country code";
+                                  // }
 
-                                  return null; // Valid input
+                                  // return null; 
                                 },
                                 suffixIcon: Container(
                                   padding:
@@ -225,18 +228,15 @@ class ShareResources extends StatelessWidget {
                     onTap: () async {
                       if (_formkey.currentState!.validate()) {
                         try {
-                          appcontroller.isLoading.value = true; // Start loading
+                          appcontroller.isLoading.value = true;
                           appcontroller.isSuccess.value = false;
 
                           await appcontroller.sendResources();
 
-                          // Mark as success
                           appcontroller.isSuccess.value = true;
-                          // Show success and navigate back
+
                           await Future.delayed(const Duration(seconds: 3));
-                          // appcontroller.selectedItems.clear();
-                          // appcontroller.medicalSearchDetails.clear();
-                          // appcontroller.filteredMedicalSearch.refresh();
+
                           appcontroller.refreshData();
 
                           Get.toNamed('/');

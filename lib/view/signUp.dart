@@ -107,17 +107,17 @@ class Signup extends StatelessWidget {
                       }
 
                       // Check if the country code is valid (optional)
-                      final validCountryCodes = [
-                        "1", "91", "44", "86",
-                        "20", // Add more as needed
-                      ];
-                      String countryCode = value.substring(
-                          0,
-                          value.length -
-                              10); // Assuming last 10 digits are phone number
-                      if (!validCountryCodes.contains(countryCode)) {
-                        return "Invalid country code";
-                      }
+                      // final validCountryCodes = [
+                      //   "1", "91", "44", "86",
+                      //   "20", 
+                      // ];
+                      // String countryCode = value.substring(
+                      //     0,
+                      //     value.length -
+                      //         10); 
+                      // if (!validCountryCodes.contains(countryCode)) {
+                      //   return "Invalid country code";
+                      // }
 
                       return null; // Valid input
                     },

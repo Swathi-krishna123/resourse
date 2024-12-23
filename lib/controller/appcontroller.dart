@@ -199,7 +199,7 @@ class Appcontroller extends GetxController {
         "BrowseInfo": "",
         "Tags": [
           {"T": "c1", "V": medicalSearchDetailsid},
-          {"T": "c2", "V": phoneNumbersExtracted},
+          {"T": "c2", "V": "1$phoneNumbersExtracted"},
           {"T": "c3", "V": email},
           {"T": "c4", "V": notes},
           {"T": "c10", "V": 2}
@@ -208,8 +208,7 @@ class Appcontroller extends GetxController {
 
       var response = await DioHandler.readMedical(body: body);
 
-      if (response['Status'] == 1 || response['Status'] == -1) {
-        log('success');
+      if (response['Status'] == 1) {
         log('response:$response');
         Get.snackbar('Send', 'Message Send Successfully');
       } else {
